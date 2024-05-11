@@ -7,7 +7,7 @@
     -fx-background-color: #262b44;
 }
 #labelBonfire {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: WHITE;
 }
 
 
@@ -24,12 +24,41 @@ VBox > Button {
 
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: WHITE;
 
     -fx-text-alignment: center;
     -fx-wrap-text: true;
 }
 
+VBox > Button:pressed {
+    -fx-background-color: #5a6988;
+}
+
 FlowPane {
     -fx-background-color: #5a6988;
+    -fx-padding: 20;
+    -fx-hgap: 20;
+    -fx-vgap: 25;
+}
+
+FlowPane > Pane {
+    -fx-background-color: #262b44;
+    -fx-background-image: url("gustavo.jpg");
+    -fx-background-size: 192;
+    -fx-pref-width: 192;
+    -fx-pref-height: 192;
+
+    -fx-background-position: center;
+    -fx-background-repeat: stretch;
+}
+FlowPane > Pane > Label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: WHITE;
+}
+FlowPane > Pane > Button {
+    -fx-background-color: RED;
+    -fx-pref-width: 192;
+    -fx-pref-height: 192;
+    -fx-opacity: 0.2;
 }
