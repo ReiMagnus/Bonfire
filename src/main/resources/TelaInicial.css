@@ -10,6 +10,14 @@
     -fx-text-fill: WHITE;
 }
 
+#janelinha {
+    -fx-background-color: #262b44;
+    -fx-background-radius: 20;
+}
+#janelinha > Label {
+    -fx-font-color: WHITE;
+}
+
 
 VBox {
     -fx-background-color: #3a4466;
@@ -41,24 +49,15 @@ FlowPane {
     -fx-vgap: 25;
 }
 
-FlowPane > Pane {
-    -fx-background-color: #262b44;
-    -fx-background-image: url("gustavo.jpg");
-    -fx-background-size: 192;
-    -fx-pref-width: 192;
-    -fx-pref-height: 192;
-
-    -fx-background-position: center;
-    -fx-background-repeat: stretch;
-}
-FlowPane > Pane > Label {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-    -fx-text-fill: WHITE;
-}
 FlowPane > Pane > Button {
     -fx-background-color: RED;
     -fx-pref-width: 192;
     -fx-pref-height: 192;
     -fx-opacity: 0.2;
 }
+FlowPane > Pane > Label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: WHITE;
+}
+

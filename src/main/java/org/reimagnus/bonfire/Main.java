@@ -20,6 +20,9 @@ public class Main extends Application {
 
         Scene scene = new Scene(root, 1280, 720);
 
+        stage.setMinWidth(1280+16);
+        stage.setMinHeight(720+39);
+
         stage.setTitle("Bonfire");
         stage.getIcons().add(icon);
 

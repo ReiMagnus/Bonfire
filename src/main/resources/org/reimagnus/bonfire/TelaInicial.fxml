@@ -32,15 +32,6 @@
             <Line endX="80.0" startX="-80.0" />
          </children>
       </VBox>
-      <FlowPane fx:id="flowPane" layoutX="200.0" prefHeight="720.0" prefWidth="1080.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Pane prefHeight="192.0" prefWidth="192.0">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#teste" prefHeight="192.0" prefWidth="192.0" />
-                  <Label alignment="CENTER" layoutY="188.0" prefHeight="32.0" prefWidth="192.0" text="Nome" textAlignment="CENTER" wrapText="true" />
-               </children>
-            </Pane>
-         </children>
-      </FlowPane>
+      <FlowPane fx:id="flowPane" layoutX="200.0" prefHeight="720.0" prefWidth="1080.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>
