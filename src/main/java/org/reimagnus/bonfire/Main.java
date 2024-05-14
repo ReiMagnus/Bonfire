@@ -5,11 +5,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.util.Objects;
 
 public class Main extends Application {
+
+
 
     private final Image icon = new Image(String.valueOf(getClass().getResource("/IconBonfire.png")));
 
@@ -27,6 +31,7 @@ public class Main extends Application {
         stage.getIcons().add(icon);
 
         stage.setScene(scene);
+        stage.initStyle(StageStyle.DECORATED);
         stage.show();
     }
 
