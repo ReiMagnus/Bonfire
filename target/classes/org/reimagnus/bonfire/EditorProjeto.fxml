@@ -1,29 +1,154 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.19796557120500782, 0.8020344287949922" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.reimagnus.bonfire.ControlEditorProjeto">
+<SplitPane fx:id="splitPane" dividerPositions="0.19796557120500782, 0.8020344287949922" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="720.0" minWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.reimagnus.bonfire.ControlEditorProjeto">
    <items>
-      <VBox maxWidth="350.0" minHeight="720.0" minWidth="250.0" />
-      <VBox prefHeight="200.0" prefWidth="100.0">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="250.0" style="-fx-background-color: silver;">
          <children>
-            <ToolBar prefHeight="40.0" prefWidth="200.0">
-              <items>
-                <Button mnemonicParsing="false" text="Button" />
-              </items>
-            </ToolBar>
-            <FlowPane alignment="CENTER" prefHeight="1000.0" prefWidth="200.0" style="-fx-background-color: silver;">
+            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="200.0" style="-fx-background-color: white;">
                <children>
-                  <Pane prefHeight="660.0" prefWidth="466.0" style="-fx-background-color: white;" />
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="250.0" text="Informações da ficha" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="22.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefWidth="250.0">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" minWidth="68.0" prefHeight="157.0" spacing="5.0">
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="250.0" text="Nome:" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="17.0" prefWidth="250.0" text="Criador:" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="27.0" prefWidth="120.0" text="Versão:" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="17.0" prefWidth="250.0" text="ID:" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="17.0" prefWidth="250.0" text="Icon:" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="159.0" spacing="2.0">
+                           <children>
+                              <TextField fx:id="nomeModelo" focusTraversable="false" prefHeight="30.0" text="teste">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <TextField fx:id="criadorModelo" focusTraversable="false" prefHeight="30.0" text="teste">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <HBox maxWidth="1.7976931348623157E308" spacing="2.0">
+                                 <children>
+                                    <TextField fx:id="versao1Modelo" focusTraversable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <TextField fx:id="versao2Modelo" focusTraversable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <TextField fx:id="versao3Modelo" focusTraversable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <Label fx:id="idModelo" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="AAAAAAAAAA">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </Label>
+                              <Button fx:id="imagemModelo" focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" text="Imagem" />
+                           </children>
+                        </VBox>
+                     </children>
+                     <effect>
+                        <Blend mode="MULTIPLY" />
+                     </effect>
+                     <padding>
+                        <Insets left="5.0" right="5.0" />
+                     </padding>
+                  </HBox>
                </children>
-            </FlowPane>
+            </VBox>
          </children>
       </VBox>
-      <VBox maxWidth="350.0" minHeight="720.0" minWidth="250.0" />
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="566.0" prefWidth="766.0">
+         <children>
+            <ToolBar maxHeight="1.7976931348623157E308">
+              <items>
+                <Button mnemonicParsing="false" text="Salvar" />
+                  <Button mnemonicParsing="false" text="Exportar" />
+                  <Button mnemonicParsing="false" text="Button" />
+                  <Button fx:id="bTelaInicial" mnemonicParsing="false" onAction="#buttonTelaInicial" text="Tela Inicial" />
+              </items>
+            </ToolBar>
+            <FlowPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="685.0" minWidth="766.0" style="-fx-background-color: grey;">
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" />
+               </children></FlowPane>
+         </children>
+      </VBox>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="250.0" style="-fx-background-color: silver;">
+         <children>
+            <Accordion maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="720.0">
+              <panes>
+                <TitledPane animated="false" text="untitled 1">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+                <TitledPane animated="false" text="untitled 2">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+                <TitledPane animated="false" text="untitled 3">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+              </panes>
+            </Accordion>
+         </children></VBox>
    </items>
 </SplitPane>

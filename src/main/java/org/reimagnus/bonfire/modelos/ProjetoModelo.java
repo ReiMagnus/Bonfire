@@ -7,8 +7,8 @@ public class ProjetoModelo {
 
     public Modelo modelo;
 
-    public ProjetoModelo(String nome, String criador) {
-        modelo = new Modelo(geradorID(), nome, criador);
+    public ProjetoModelo() {
+        modelo = new Modelo(geradorID());
     }
 
     private String geradorID() {
@@ -19,7 +19,6 @@ public class ProjetoModelo {
             int ale = random.nextInt(letras.length);
             id += letras[ale];
         }
-        System.out.println("ID: " + id);
         return id;
     }
 

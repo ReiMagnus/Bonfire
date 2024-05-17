@@ -13,9 +13,7 @@ import java.util.Objects;
 
 public class Main extends Application {
 
-
-
-    private final Image icon = new Image(String.valueOf(getClass().getResource("/IconBonfire.png")));
+    private final Image icon = new Image("/IconBonfire.png");
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -35,6 +33,9 @@ public class Main extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {launch();}
+    public static void main(String[] args) {
+        Save.carregandoArquivos();
+        launch();
+    }
 
 }

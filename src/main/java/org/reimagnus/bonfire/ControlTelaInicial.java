@@ -5,10 +5,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -21,7 +23,6 @@ import org.reimagnus.bonfire.modelos.ModeloPronto;
 import org.reimagnus.bonfire.modelos.Personagem;
 import org.reimagnus.bonfire.modelos.ProjetoModelo;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -34,29 +35,26 @@ public class ControlTelaInicial implements Initializable {
     @FXML
     private AnchorPane anchorPane;
     @FXML
-    private FlowPane flowPane;
+    private FlowPane icones;
+    @FXML
+    private ListView<ModeloPronto> listFichas;
     @FXML
     private Button bmCriarPersonagem, bmVerPersonagem, bmCriarModelo, bmVerModelo, bmGerenciarModelo;
 
-    private final Map<Integer, ProjetoModelo> listaProjetos = new HashMap<>();
-    private final Map<Integer, ModeloPronto> listaModelos = new HashMap<>();
-    private final Map<Integer, Personagem> listaPersonagens = new HashMap<>();
-
-    private boolean janelinha = false; //Indica se a janelinha está aparecendo
-    private boolean verPane = true; //True= ver personagens, False = ver projetos
+    private Node janelinha = null; //Indica se a janelinha está aparecendo
+    public boolean verPane = true; //True= ver personagens, False = ver projetos
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Métodos para carregar projetos, modelos e personagens salvos
+        listFichas.getItems().addAll(Save.listaModelos);
         mostrarPersonagens();
     }
 
     // Botões da Tela Inicial --------------------------------------------
     public void buttonCriarPersonagem(ActionEvent event) {
-        if(listaPersonagens.size() < 15) {
-            Personagem p = new Personagem();
-            colocarListaPersonagens(p);
-            mostrarPersonagens();
+        if(Save.listaPersonagens.size() < 15) {
+            criandoPersonagem();
         }
     }
 
@@ -69,8 +67,8 @@ public class ControlTelaInicial implements Initializable {
     }
 
     public void buttonCriarModelo(ActionEvent event) {
-        if(listaProjetos.size() < 15) {
-            criandoProjeto("nome", "criador");
+        if(Save.listaProjetos.size() < 15) {
+            criandoProjeto();
         }
     }
 
@@ -88,12 +86,14 @@ public class ControlTelaInicial implements Initializable {
 
     // Manipulando as listas ---------------------------------------------
     private void colocarListaProjetos(ProjetoModelo pm) {
-        listaProjetos.put(listaProjetos.size(), pm);
+        Save.listaProjetos.put(Save.listaProjetos.size(), pm);
+        Save.numProjetos++;
         System.out.println("Criei um projeto");
     }
 
     private void colocarListaPersonagens(Personagem p) {
-        listaPersonagens.put(listaPersonagens.size(), p);
+        Save.listaPersonagens.put(Save.listaPersonagens.size(), p);
+        Save.numPersonas++;
         System.out.println("Criei um personagem");
     }
 
@@ -113,7 +113,7 @@ public class ControlTelaInicial implements Initializable {
         button.setPrefWidth(tamPane);
         button.setPrefHeight(tamPane);
         button.setOnAction(this::mudarTela);
-        button.setId(String.format("%d", flowPane.getChildren().size()));
+        button.setId(String.format("%d", icones.getChildren().size()));
 
         //Nome do modelo/personagem
         label.setText(nome);
@@ -132,66 +132,102 @@ public class ControlTelaInicial implements Initializable {
 
     private void mostrarPersonagens() {
         verPane = true;
-        flowPane.getChildren().removeAll(flowPane.getChildren());
-        for(int i = 0; i < listaPersonagens.size(); i++) {
+        icones.getChildren().removeAll(icones.getChildren());
+        for(int i = 0; i < Save.listaPersonagens.size(); i++) {
             String nome = "persona" + (i+1);
             Image imagem = new Image("/gustavo.jpg");
 
-            flowPane.getChildren().add(criarIcon(nome, imagem));
+            icones.getChildren().add(criarIcon(nome, imagem));
         }
         //System.out.println("Monstrando os personagens");
     }
 
     private void mostrarProjetos() {
         verPane = false;
-        flowPane.getChildren().removeAll(flowPane.getChildren());
-        for(int i = 0; i < listaProjetos.size(); i++) {
-            String nome = listaProjetos.get(i).modelo.getNomeModelo();
+        icones.getChildren().removeAll(icones.getChildren());
+        for(int i = 0; i < Save.listaProjetos.size(); i++) {
+            String nome = Save.listaProjetos.get(i).modelo.getNomeModelo();
             Image imagem = new Image("/grafite.jpg");
 
-            flowPane.getChildren().add(criarIcon(nome, imagem));
+            icones.getChildren().add(criarIcon(nome, imagem));
         }
         //System.out.println("Monstrando os projetos de modelos");
     }
 
-//    private void mostrarJanelinha() {
-//
-//        int w, h;
-//        w = 250;
-//        h = 300;
-//
-//        VBox janelinha = new VBox();
-//        janelinha.setPrefWidth(w);
-//        janelinha.setPrefHeight(h);
-//        janelinha.setLayoutX(anchorPane.getWidth()/2 - w/2);
-//        janelinha.setLayoutY(anchorPane.getHeight()/2 - h/2);
-//        System.out.println(anchorPane.getPrefHeight());
-//
-//        janelinha.getChildren().addAll();
-//        anchorPane.getChildren().add(janelinha);
-//    }
+    private void mostrarJanelinha() {
+        if(janelinha == null) {
+            FlowPane hud = new FlowPane();
+            hud.setId("hud");
+            hud.setMaxSize(1280, 720);
+            hud.setPrefWidth(hud.getMaxWidth());
+            hud.setPrefHeight(hud.getMaxHeight());
+            hud.setAlignment(Pos.CENTER);
+
+            VBox j = criarJanelinha();
+
+            hud.getChildren().add(j);
+            anchorPane.getChildren().add(hud);
+
+            janelinha = hud;
+        }
+    }
+
+    private void fecharJanelinha(ActionEvent event) {
+        if(janelinha != null) {
+            anchorPane.getChildren().remove(janelinha);
+            janelinha = null;
+        }
+    }
 
     // Métodos de fundo --------------------------------------------------
-    private void criandoProjeto(String nome, String criador) {
-        ProjetoModelo projeto = new ProjetoModelo(nome, criador);
+    private void criandoProjeto() {
+        ProjetoModelo projeto = new ProjetoModelo();
 
         colocarListaProjetos(projeto);
         mostrarProjetos();
     }
 
+    private void criandoPersonagem() {
+        Personagem p = new Personagem();
+
+        colocarListaPersonagens(p);
+        mostrarPersonagens();
+    }
+
     private void mudarTela(ActionEvent event) {
-        String[] o = String.valueOf(event.getSource()).split("");
-        String id = "";
-        id += o[10];
-        id += o[11];
         try {
-            Integer.parseInt(id);
+            FXMLLoader loader;
+
+            if(verPane) { //Ir pra a tela de personagem
+                ControlPersonagem cp;
+                loader = new FXMLLoader(getClass().getResource("Personagem.fxml"));
+                root = loader.load();
+            } else {
+                ControlEditorProjeto cep;
+                loader = new FXMLLoader(getClass().getResource("EditorProjeto.fxml"));
+                root = loader.load();
+                cep = loader.getController();
+                cep.carregandoProjeto(Save.listaProjetos.get(0));
+            }
+            stage = (Stage) anchorPane.getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
         } catch (Exception e) {
-        } finally {
-            String[] a = id.split("");
-            id = a[0];
+            System.out.println("Erro em carregar a proxima cena.\n---------------------------------------------");
+            e.printStackTrace();
         }
-        System.out.println(Integer.parseInt(id));
+    }
+
+    private VBox criarJanelinha() {
+
+        VBox j = new VBox();
+        j.setAlignment(Pos.CENTER);
+        j.setStyle("-fx-background-radius: 25");
+        j.setPrefWidth(250);
+        j.setPrefHeight(300);
+
+        return j;
     }
 
     public void teste(ActionEvent event) {

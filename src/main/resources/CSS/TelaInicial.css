@@ -41,22 +41,22 @@ VBox > Button:pressed {
     -fx-background-color: #5a6988;
 }
 
-FlowPane {
+#icones {
     -fx-background-color: #5a6988;
     -fx-padding: 20;
     -fx-hgap: 20;
     -fx-vgap: 25;
 }
 
-FlowPane > Pane {
+#icones > Pane {
     -fx-background-color: #262b44;
 }
-FlowPane > Pane > ImageView {
+#icones > Pane > ImageView {
 }
-FlowPane > Pane > Button {
+#icones > Pane > Button {
     -fx-background-color: transparent;
 }
-FlowPane > Pane > Label {
+#icones > Pane > Label {
     -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-text-fill: WHITE;
