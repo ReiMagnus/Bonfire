@@ -24,6 +24,7 @@ public class Main extends Application {
 
         stage.setMinWidth(1280+16);
         stage.setMinHeight(720+39);
+        stage.centerOnScreen();
 
         stage.setTitle("Bonfire");
         stage.getIcons().add(icon);

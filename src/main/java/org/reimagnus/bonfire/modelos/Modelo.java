@@ -1,10 +1,9 @@
 package org.reimagnus.bonfire.modelos;
 
-import javafx.scene.control.Control;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
-import java.util.Map;
+import java.util.Arrays;
 
 public class Modelo {
 
@@ -16,10 +15,10 @@ public class Modelo {
     private Image imagemModelo;
 
     // -- Variáveis das páginas e conteúdo --
-    private byte numPaginas;
-    private final Pane[] paginas = {new Pane(), new Pane(), new Pane()};
-    private Map<Integer, ? extends Control> listaControls;
-    private Map<Integer, String> listaInfos;
+    private byte numPaginas = 1;
+    private Pane[] paginas = {new Pane(), new Pane(), new Pane()};
+    //private Map<Integer, ? extends Control> listaControls;
+    //private Map<Integer, String> listaInfos;
 
     public Modelo(String id) {
         idModelo = id;
@@ -37,17 +36,27 @@ public class Modelo {
     public Image getImagemModelo() { return imagemModelo; }
     public byte getNumPaginas() { return numPaginas; }
     public Pane[] getPaginas() {return paginas;}
-    public Map<Integer, ? extends Control> getListaControls() { return listaControls; }
-    public Map<Integer, String> getListaInfos() { return listaInfos; }
+    //public Map<Integer, ? extends Control> getListaControls() { return listaControls; }
+    //public Map<Integer, String> getListaInfos() { return listaInfos; }
+
+    // -- Sets --
+    public void setNomeModelo(String nomeModelo) {this.nomeModelo = nomeModelo;}
+    public void setVersaoModelo(String[] versaoModelo) {this.versaoModelo = versaoModelo.clone();}
+    public void setCriadorModelo(String criadorModelo) {this.criadorModelo = criadorModelo;}
+    public void setImagemModelo(Image imagemModelo) {this.imagemModelo = imagemModelo;}
+    public void setNumPaginas(byte numPaginas) {this.numPaginas = numPaginas;}
+    public void setPaginas(Pane[] paginas) {this.paginas = paginas.clone();}
 
     @Override
     public String toString() {
+        String[] img = imagemModelo.getUrl().split("/");
         return String.format(
-            "ID: %s, Nome: %s, Versão: %s, Criador: %s",
+            "ID: %s, Nome: %s, Versão: %s, Criador: %s, Imagem: %s",
             idModelo,
             nomeModelo,
-            versaoModelo,
-            criadorModelo
+            Arrays.toString(versaoModelo),
+            criadorModelo,
+            img[img.length-1]
         );
     }
 

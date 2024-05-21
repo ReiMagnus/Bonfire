@@ -46,6 +46,7 @@ public class ControlTelaInicial implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         //Métodos para carregar projetos, modelos e personagens salvos
         listFichas.getItems().addAll(Save.listaModelos);
         mostrarPersonagens();
@@ -87,13 +88,11 @@ public class ControlTelaInicial implements Initializable {
     // Manipulando as listas ---------------------------------------------
     private void colocarListaProjetos(ProjetoModelo pm) {
         Save.listaProjetos.put(Save.listaProjetos.size(), pm);
-        Save.numProjetos++;
         System.out.println("Criei um projeto");
     }
 
     private void colocarListaPersonagens(Personagem p) {
         Save.listaPersonagens.put(Save.listaPersonagens.size(), p);
-        Save.numPersonas++;
         System.out.println("Criei um personagem");
     }
 
@@ -113,7 +112,7 @@ public class ControlTelaInicial implements Initializable {
         button.setPrefWidth(tamPane);
         button.setPrefHeight(tamPane);
         button.setOnAction(this::mudarTela);
-        button.setId(String.format("%d", icones.getChildren().size()));
+        button.setId(String.format("&%d&", icones.getChildren().size()));
 
         //Nome do modelo/personagem
         label.setText(nome);
@@ -198,21 +197,36 @@ public class ControlTelaInicial implements Initializable {
         try {
             FXMLLoader loader;
 
-            if(verPane) { //Ir pra a tela de personagem
+            stage = (Stage) anchorPane.getScene().getWindow();
+
+            int idProjeto = Integer.parseInt(event.getSource().toString().split("&")[1]);
+
+            if(verPane) { //Ir pra a tela de personagens
                 ControlPersonagem cp;
                 loader = new FXMLLoader(getClass().getResource("Personagem.fxml"));
                 root = loader.load();
-            } else {
+
+                stage.setTitle("Bonfire - Personagem");
+                stage.centerOnScreen();
+
+                stage.setMinWidth(660+16);
+                stage.setMinHeight(720+39);
+                stage.setMaxWidth(1280+16);
+
+            } else { // Ir pra o editor de fichas
                 ControlEditorProjeto cep;
                 loader = new FXMLLoader(getClass().getResource("EditorProjeto.fxml"));
                 root = loader.load();
                 cep = loader.getController();
-                cep.carregandoProjeto(Save.listaProjetos.get(0));
+                cep.carregandoProjeto(Save.listaProjetos.get(idProjeto), idProjeto);
+
+                stage.setTitle("Bonfire - Editor de ficha");
             }
-            stage = (Stage) anchorPane.getScene().getWindow();
+
             scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
+
         } catch (Exception e) {
             System.out.println("Erro em carregar a proxima cena.\n---------------------------------------------");
             e.printStackTrace();

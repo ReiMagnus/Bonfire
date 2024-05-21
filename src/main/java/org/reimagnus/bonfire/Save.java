@@ -9,13 +9,13 @@ import java.util.Set;
 
 public class Save {
 
-    public static final Map<Integer, ProjetoModelo> listaProjetos = new HashMap<>();
-    public static final Set<ModeloPronto> listaModelos = new HashSet<>();//Map<Integer, ModeloPronto> listaModelos = new HashMap<>();
-    public static final Map<Integer, Personagem> listaPersonagens = new HashMap<>();
+    public static Map<Integer, ProjetoModelo> listaProjetos = new HashMap<>();
+    public static Set<ModeloPronto> listaModelos = new HashSet<>();//Map<Integer, ModeloPronto> listaModelos = new HashMap<>();
+    public static Map<Integer, Personagem> listaPersonagens = new HashMap<>();
 
-    public static int numProjetos = 0;
-    public static int numModelosP = 0;
-    public static int numPersonas = 0;
+    //public static int numProjetos = 0;
+    //public static int numModelosP = 0;
+    //public static int numPersonas = 0;
 
     public static void carregandoArquivos() {
         System.out.println("Carregando arquivos salvos...");

@@ -34,6 +34,7 @@ public class ControlEditorProjeto implements Initializable {
     //Botões superiores da tela
     @FXML Button buttonTelaInicial;
 
+    private int idProjeto;
     private ProjetoModelo projetoModelo;
 
     @Override
@@ -49,8 +50,10 @@ public class ControlEditorProjeto implements Initializable {
             root = loader.load();
             stage = (Stage) splitPane.getScene().getWindow();
             scene = new Scene(root);
-            stage.setScene(scene);
 
+            stage.setTitle("Bonfire");
+
+            stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
             System.out.println("Erro em carregar a proxima cena.\n---------------------------------------------");
@@ -58,8 +61,14 @@ public class ControlEditorProjeto implements Initializable {
         }
     }
 
+    public void buttonSalver() {
+        salvandoProjeto();
+        System.out.println("AAA");
+    }
+
     //Manipulação do projeto ---------------------------------------------
-    public void carregandoProjeto(ProjetoModelo pm) {
+    public void carregandoProjeto(ProjetoModelo pm, int id) {
+        idProjeto = id;
         projetoModelo = pm;
 
         nomeModelo.setText(pm.modelo.getNomeModelo());
@@ -74,5 +83,21 @@ public class ControlEditorProjeto implements Initializable {
         String[] nomeImg = pm.modelo.getImagemModelo().getUrl().split("/");
         imagemModelo.setText(nomeImg[nomeImg.length-1]);
     }
+
+    private void salvandoProjeto() {
+
+        String[] versao = {versao1Modelo.getText(), versao2Modelo.getText(), versao3Modelo.getText()};
+
+        projetoModelo.modelo.setNomeModelo(nomeModelo.getText());
+        projetoModelo.modelo.setCriadorModelo(criadorModelo.getText());
+        projetoModelo.modelo.setVersaoModelo(versao);
+        //projetoModelo.modelo.setImagemModelo();
+
+        //projetoModelo.modelo.setNumPaginas();
+        //projetoModelo.modelo.setPaginas();
+
+        Save.listaProjetos.replace(idProjeto, projetoModelo);
+    }
+
 
 }
