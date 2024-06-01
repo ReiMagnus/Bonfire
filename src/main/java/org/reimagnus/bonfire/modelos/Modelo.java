@@ -17,8 +17,7 @@ public class Modelo {
     // -- Variáveis das páginas e conteúdo --
     private byte numPaginas = 1;
     private Pane[] paginas = {new Pane(), new Pane(), new Pane()};
-    //private Map<Integer, ? extends Control> listaControls;
-    //private Map<Integer, String> listaInfos;
+    private Image[] imagesBG = new Image[3];
 
     public Modelo(String id) {
         idModelo = id;
@@ -36,8 +35,7 @@ public class Modelo {
     public Image getImagemModelo() { return imagemModelo; }
     public byte getNumPaginas() { return numPaginas; }
     public Pane[] getPaginas() {return paginas;}
-    //public Map<Integer, ? extends Control> getListaControls() { return listaControls; }
-    //public Map<Integer, String> getListaInfos() { return listaInfos; }
+    public Image[] getImagesBG() {return imagesBG;}
 
     // -- Sets --
     public void setNomeModelo(String nomeModelo) {this.nomeModelo = nomeModelo;}
@@ -46,6 +44,7 @@ public class Modelo {
     public void setImagemModelo(Image imagemModelo) {this.imagemModelo = imagemModelo;}
     public void setNumPaginas(byte numPaginas) {this.numPaginas = numPaginas;}
     public void setPaginas(Pane[] paginas) {this.paginas = paginas.clone();}
+    public void setImagesBG(Image[] imagesBG) {this.imagesBG = imagesBG.clone();}
 
     @Override
     public String toString() {
@@ -59,5 +58,6 @@ public class Modelo {
             img[img.length-1]
         );
     }
+
 
 }

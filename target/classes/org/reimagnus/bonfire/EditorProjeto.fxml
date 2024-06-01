@@ -1,157 +1,289 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
+<?import javafx.geometry.Point3D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.effect.Blend?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane fx:id="splitPane" dividerPositions="0.19796557120500782, 0.8020344287949922" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.reimagnus.bonfire.ControlEditorProjeto">
-   <items>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="250.0" style="-fx-background-color: silver;">
-         <children>
-            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="200.0" style="-fx-background-color: white;">
-               <children>
-                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="250.0" text="Informações da ficha" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="22.0" />
-                     </font>
-                  </Label>
-                  <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefWidth="250.0">
-                     <children>
-                        <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" minWidth="68.0" prefHeight="157.0" spacing="5.0">
-                           <children>
-                              <Label prefHeight="17.0" prefWidth="250.0" text="Nome:" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label prefHeight="17.0" prefWidth="250.0" text="Criador:" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label prefHeight="27.0" prefWidth="120.0" text="Versão:" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label prefHeight="17.0" prefWidth="250.0" text="ID:" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label prefHeight="17.0" prefWidth="250.0" text="Icon:" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="159.0" spacing="2.0">
-                           <children>
-                              <TextField fx:id="nomeModelo" focusTraversable="false" prefHeight="30.0" text="teste">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
-                              <TextField fx:id="criadorModelo" focusTraversable="false" prefHeight="30.0" text="teste">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
-                              <HBox maxWidth="1.7976931348623157E308" spacing="2.0">
-                                 <children>
-                                    <TextField fx:id="versao1Modelo" focusTraversable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
-                                    <TextField fx:id="versao2Modelo" focusTraversable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
-                                    <TextField fx:id="versao3Modelo" focusTraversable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
-                                 </children>
-                              </HBox>
-                              <Label fx:id="idModelo" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="AAAAAAAAAA">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets left="5.0" />
-                                 </padding>
-                              </Label>
-                              <Button fx:id="imagemModelo" focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" text="Imagem" />
-                           </children>
-                        </VBox>
-                     </children>
-                     <effect>
-                        <Blend mode="MULTIPLY" />
-                     </effect>
-                     <padding>
-                        <Insets left="5.0" right="5.0" />
-                     </padding>
-                  </HBox>
-               </children>
-            </VBox>
-         </children>
-      </VBox>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="766.0">
-         <children>
-            <ToolBar maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0">
-              <items>
-                <Button fx:id="bSalvar" mnemonicParsing="false" onAction="#buttonSalver" text="Salvar" />
-                  <Button mnemonicParsing="false" text="Exportar" />
-                  <Button mnemonicParsing="false" text="Button" />
-                  <Button fx:id="bTelaInicial" mnemonicParsing="false" onAction="#buttonTelaInicial" text="Tela Inicial" />
-              </items>
-            </ToolBar>
-            <ScrollPane hbarPolicy="NEVER" hvalue="0.49" maxWidth="1.7976931348623157E308">
-               <content>
-                  <FlowPane alignment="CENTER" columnHalignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="964.0" prefWidth="1280.0" prefWrapLength="40.0" style="-fx-background-color: grey;">
-                     <children>
-                        <Pane prefHeight="877.0" prefWidth="620.0" style="-fx-background-color: white;" />
-                     </children>
-                  </FlowPane>
-               </content>
-            </ScrollPane>
-         </children>
-      </VBox>
-      <Accordion maxHeight="1.7976931348623157E308" maxWidth="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="250.0">
-        <panes>
-          <TitledPane animated="false" text="untitled 1">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </TitledPane>
-          <TitledPane animated="false" text="untitled 2">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </TitledPane>
-          <TitledPane animated="false" text="untitled 3">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </TitledPane>
-        </panes>
-      </Accordion>
-   </items>
-</SplitPane>
+<AnchorPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.reimagnus.bonfire.ControlEditorProjeto">
+   <VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="250.0" style="-fx-background-color: white;">
+      <children>
+         <Label alignment="CENTER" minHeight="-Infinity" prefHeight="35.0" prefWidth="250.0" style="-fx-background-color: silver;" text="Informações da ficha">
+            <font>
+               <Font name="Arial Black" size="20.0" />
+            </font>
+         </Label>
+         <VBox maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0" spacing="5.0">
+            <children>
+               <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                  <children>
+                     <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" minWidth="68.0" spacing="4.0">
+                        <children>
+                           <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="250.0" text="Nome:" textAlignment="CENTER">
+                              <font>
+                                 <Font size="16.0" />
+                              </font>
+                           </Label>
+                           <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="250.0" text="Criador:" textAlignment="CENTER">
+                              <font>
+                                 <Font size="16.0" />
+                              </font>
+                           </Label>
+                           <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="120.0" text="Versão:" textAlignment="CENTER">
+                              <font>
+                                 <Font size="16.0" />
+                              </font>
+                           </Label>
+                           <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="250.0" text="ID:" textAlignment="CENTER">
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                           </Label>
+                           <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="250.0" text="Icon:" textAlignment="CENTER">
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </VBox>
+                     <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="4.0">
+                        <children>
+                           <TextField fx:id="nomeModelo" focusTraversable="false" minHeight="-Infinity" prefHeight="30.0" text="teste">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </TextField>
+                           <TextField fx:id="criadorModelo" focusTraversable="false" minHeight="-Infinity" prefHeight="30.0" text="teste">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </TextField>
+                           <HBox maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="30.0" spacing="2.0">
+                              <children>
+                                 <TextField fx:id="versao1Modelo" focusTraversable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </TextField>
+                                 <TextField fx:id="versao2Modelo" focusTraversable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </TextField>
+                                 <TextField fx:id="versao3Modelo" focusTraversable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </TextField>
+                              </children>
+                           </HBox>
+                           <Label fx:id="idModelo" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="30.0" text="AAAAAAAAAA">
+                              <font>
+                                 <Font name="System Bold" size="20.0" />
+                              </font>
+                              <padding>
+                                 <Insets left="5.0" />
+                              </padding>
+                           </Label>
+                           <Button fx:id="imagemModelo" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" prefHeight="30.0" text="Imagem" />
+                        </children>
+                     </VBox>
+                  </children>
+                  <effect>
+                     <Blend mode="MULTIPLY" />
+                  </effect>
+               </HBox>
+               <HBox alignment="CENTER_LEFT" minHeight="-Infinity" prefHeight="30.0" spacing="4.0">
+                  <children>
+                     <Label minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" text="N. págimas:" textAlignment="CENTER">
+                        <font>
+                           <Font size="16.0" />
+                        </font>
+                     </Label>
+                     <HBox alignment="CENTER" prefHeight="30.0" prefWidth="150.0" spacing="7.0">
+                        <children>
+                           <RadioButton fx:id="rb1" mnemonicParsing="false" selected="true" text="1">
+                              <toggleGroup>
+                                 <ToggleGroup fx:id="numPags" />
+                              </toggleGroup>
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </RadioButton>
+                           <RadioButton fx:id="rb2" mnemonicParsing="false" text="2" toggleGroup="$numPags">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </RadioButton>
+                           <RadioButton fx:id="rb3" mnemonicParsing="false" text="3" toggleGroup="$numPags">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </RadioButton>
+                        </children>
+                     </HBox>
+                  </children>
+               </HBox>
+               <HBox alignment="CENTER_LEFT" minHeight="-Infinity" prefHeight="30.0" spacing="4.0">
+                  <children>
+                     <Label minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" text="Background:" textAlignment="CENTER">
+                        <font>
+                           <Font size="16.0" />
+                        </font>
+                     </Label>
+                     <Button fx:id="bImageBG" focusTraversable="false" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="imagem" />
+                  </children>
+               </HBox>
+            </children>
+            <padding>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+         </VBox>
+         <Label alignment="CENTER" minHeight="-Infinity" prefHeight="35.0" prefWidth="250.0" style="-fx-background-color: silver;" text="Hierarquia">
+            <font>
+               <Font name="Arial Black" size="20.0" />
+            </font>
+         </Label>
+         <TreeView fx:id="listHierarquia" prefHeight="399.0" style="-fx-background-color: white;">
+            <VBox.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </VBox.margin>
+         </TreeView>
+      </children>
+   </VBox>
+   <VBox layoutX="250.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="780.0">
+      <ToolBar maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0">
+         <Button fx:id="bSalvar" mnemonicParsing="false" onAction="#buttonSalvar" text="Salvar" />
+         <Button fx:id="bExportar" mnemonicParsing="false" text="Exportar" />
+         <Line endY="10.0" scaleX="2.0" startY="-10.0" />
+         <Button fx:id="bPagina1" mnemonicParsing="false" onAction="#trocarPagina" text="Página 1" />
+         <Button fx:id="bPagina2" mnemonicParsing="false" onAction="#trocarPagina" text="Página 2" />
+         <Button fx:id="bPagina3" mnemonicParsing="false" onAction="#trocarPagina" text="Página 3" />
+         <Line endY="10.0" scaleX="2.0" startY="-10.0" />
+         <Button fx:id="bTelaInicial" mnemonicParsing="false" onAction="#buttonTelaInicial" text="Tela Inicial" />
+      </ToolBar>
+      <ScrollPane fx:id="nivelScroll" hbarPolicy="NEVER" hvalue="0.488" maxWidth="1.7976931348623157E308">
+         <FlowPane alignment="CENTER" columnHalignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="957.0" prefWidth="1280.0" prefWrapLength="40.0" style="-fx-background-color: grey;">
+            <children>
+               <Pane fx:id="folha" prefHeight="877.0" prefWidth="620.0" style="-fx-background-color: white;">
+                  <children>
+                     <ImageView fx:id="imageBG" fitHeight="877.0" fitWidth="620.0" pickOnBounds="true" preserveRatio="true" />
+                  </children>
+               </Pane>
+            </children>
+            <rotationAxis>
+               <Point3D />
+            </rotationAxis>
+         </FlowPane>
+      </ScrollPane>
+   </VBox>
+   <VBox layoutX="1030.0" maxHeight="1.7976931348623157E308" maxWidth="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="250.0" style="-fx-background-color: white;">
+      <children>
+         <Label alignment="CENTER" minHeight="-Infinity" prefHeight="35.0" prefWidth="250.0" style="-fx-background-color: silver;" text="Nodes">
+            <font>
+               <Font name="Arial Black" size="20.0" />
+            </font>
+         </Label>
+         <TreeView fx:id="listNodes" prefHeight="250.0" prefWidth="200.0">
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+            <padding>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+         </TreeView>
+         <Label alignment="CENTER" minHeight="-Infinity" prefHeight="35.0" prefWidth="250.0" style="-fx-background-color: silver;" text="Propriedades">
+            <font>
+               <Font name="Arial Black" size="20.0" />
+            </font>
+         </Label>
+         <VBox alignment="TOP_CENTER" prefHeight="400.0" spacing="5.0" style="-fx-background-color: white;">
+            <children>
+               <Label fx:id="labelPropriedade" minHeight="-Infinity" minWidth="-Infinity" prefWidth="240.0" text="Propriedades: Vazio">
+                  <font>
+                     <Font size="13.0" />
+                  </font>
+               </Label>
+               <Line endX="240.0" />
+               <VBox fx:id="vbPros" spacing="5.0">
+                  <children>
+                     <HBox prefWidth="240.0">
+                        <children>
+                           <VBox maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="110.0" spacing="6.0">
+                              <children>
+                                 <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="110.0" text="Texto:">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </Label>
+                                 <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="110.0" text="Texto Prompt:">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </Label>
+                                 <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="110.0" text="Tam. da fonte:">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </Label>
+                                 <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="110.0" text="Comprimento:">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </Label>
+                                 <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="110.0" text="Altura:">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </Label>
+                                 <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="110.0" text="Posição X:">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </Label>
+                                 <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="110.0" text="Posição Y:">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </VBox>
+                           <VBox prefWidth="130.0" spacing="6.0">
+                              <children>
+                                 <TextField fx:id="tfText" />
+                                 <TextField fx:id="tfTextPrompt" />
+                                 <TextField fx:id="tfTamFont" />
+                                 <TextField fx:id="tfComprimento" />
+                                 <TextField fx:id="tfAltura" />
+                                 <TextField fx:id="tfPosX" />
+                                 <TextField fx:id="tfPosY" />
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                     <Button fx:id="bRemoverNode" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="240.0" text="Remover Node" />
+                  </children>
+               </VBox>
+            </children>
+            <padding>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+         </VBox>
+      </children>
+   </VBox>
+</AnchorPane>

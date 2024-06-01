@@ -8,14 +8,18 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="vBox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1280.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.reimagnus.bonfire.ControlPersonagem">
+<VBox fx:id="mainPane" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1280.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.reimagnus.bonfire.ControlPersonagem">
    <children>
       <ToolBar minHeight="-Infinity" minWidth="-Infinity">
         <items>
           <Button fx:id="bTelaInicial" mnemonicParsing="false" onAction="#buttonTelaInicial" text="Tela Inicial" />
+            <Button mnemonicParsing="false" text="Salver" />
+            <Button mnemonicParsing="false" text="Página 1" />
+            <Button mnemonicParsing="false" text="Página 2" />
+            <Button mnemonicParsing="false" text="Página 3" />
         </items>
       </ToolBar>
-      <ScrollPane hbarPolicy="NEVER" hvalue="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+      <ScrollPane hbarPolicy="NEVER" hvalue="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vbarPolicy="NEVER">
          <content>
             <FlowPane fx:id="tela" alignment="CENTER" columnHalignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefHeight="964.0" prefWidth="1280.0" prefWrapLength="40.0" style="-fx-background-color: silver;" vgap="20.0">
                <padding>

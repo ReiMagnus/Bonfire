@@ -1,16 +1,31 @@
 package org.reimagnus.bonfire;
 
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.reimagnus.bonfire.modelos.ProjetoModelo;
+import org.reimagnus.bonfire.nodes.Template;
 
 import java.net.URL;
+import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class ControlEditorProjeto implements Initializable {
 
@@ -19,39 +34,110 @@ public class ControlEditorProjeto implements Initializable {
     private Parent root;
 
     @FXML
-    private SplitPane splitPane;
+    private AnchorPane mainPane;
 
-    //informações da ficha
+    //Botões superiores da tela -----------------
+    @FXML Button bSalvar, bExportar, bPagina1, bPagina2, bPagina3,  bTelaInicial;
+
+    //Informações da ficha
     @FXML
     private TextField nomeModelo, criadorModelo, versao1Modelo, versao2Modelo, versao3Modelo;
     @FXML
     private Label idModelo;
     @FXML
-    private Button imagemModelo;
+    private Button imagemModelo, bImageBG;
     @FXML
-    private ListView<String> listNodes;
+    private RadioButton rb1, rb2, rb3;
 
-    //Botões superiores da tela
-    @FXML Button buttonTelaInicial;
+    //Hierarquia --------------------------------
+    @FXML
+    private TreeView<String> listHierarquia;
+
+    //Nodes -------------------------------------
+    @FXML
+    private TreeView<String> listNodes;
+
+    //Propriedades ------------------------------
+    @FXML
+    private VBox vbPros;
+    @FXML
+    private Label labelPropriedade;
+    @FXML
+    private TextField tfComprimento, tfAltura, tfPosX, tfPosY, tfTamFont, tfTextPrompt, tfText;
+    @FXML
+    private Button bRemoverNode;
+
+    //Folha -------------------------------------
+    @FXML
+    private Pane folha;
+    @FXML
+    private ImageView imageBG;
+
+    @FXML
+    private ScrollPane nivelScroll;
 
     private int idProjeto;
     private ProjetoModelo projetoModelo;
 
+    private Template selectControl;
+
+    private double mouseAnchorX, mouseAnchorY;
+    private double tamW, tamH;
+    private byte numPags = 1;
+    private byte atualPag = 1;
+    private Pane[] pags = {new Pane(), new Pane(), new Pane()};
+    private Image[] imagesBG;
+
+    private final String[] itens = {"Texto", "Texto Editável", "Número Inteiro", "Número Racional"};
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //listNodes.getItems().addAll("AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA", "AAAA");
+        attMenuPropriedades();
+        createListNodes();
+        tamW = folha.getPrefWidth();
+        tamH = folha.getPrefHeight();
+        bRemoverNode.setOnAction(this::removerNode);
+
+        rb1.setOnAction(this::attNumPaginas);
+        rb2.setOnAction(this::attNumPaginas);
+        rb3.setOnAction(this::attNumPaginas);
+
+        listHierarquia.setOnMousePressed(this::selecionandoItemHierarquia);
+        listHierarquia.setShowRoot(false);
+
+        listNodes.setOnMousePressed(this::selecionandoItemNode);
+        listNodes.setShowRoot(false);
+
+        Image bg = null;
+        //bg = new Image("FichaT20.png", tamW, tamH, true, true);
+        imageBG.setImage(bg);
+        //ImageView imageView = new ImageView(imageFolha);
+
+        folha.setOnMousePressed(event -> {
+            if(event.isSecondaryButtonDown()) {
+                if(selectControl != null) {
+                    selectControl.setStyle("-fx-border-color: black");
+                    selectControl = null;
+                    listHierarquia.getSelectionModel().select(null); //Desmarcando item da hierarquia
+                    listNodes.getSelectionModel().select(null); //Desmarcando item da lista de nodes
+                    attMenuPropriedades();
+                }
+            }
+        });
     }
 
-    //Botões da interface ------------------------------------------------
+    //Botões da interface superior ---------------------------------------
     public void buttonTelaInicial() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("TelaInicial.fxml"));
 
             root = loader.load();
-            stage = (Stage) splitPane.getScene().getWindow();
+            stage = (Stage) mainPane.getScene().getWindow();
             scene = new Scene(root);
 
             stage.setTitle("Bonfire");
+
+            salvandoProjeto(true);
 
             stage.setScene(scene);
             stage.show();
@@ -61,30 +147,80 @@ public class ControlEditorProjeto implements Initializable {
         }
     }
 
-    public void buttonSalver() {
-        salvandoProjeto();
-        System.out.println("AAA");
+    public void buttonSalvar() {
+        salvandoProjeto(false);
     }
+
+    public void trocarPagina(ActionEvent event) {
+        Button b = (Button) event.getTarget();
+        attFolha(Byte.parseByte(b.getId().split("")[7]));
+    }
+
 
     //Manipulação do projeto ---------------------------------------------
     public void carregandoProjeto(ProjetoModelo pm, int id) {
         idProjeto = id;
         projetoModelo = pm;
 
-        nomeModelo.setText(pm.modelo.getNomeModelo());
-        criadorModelo.setText(pm.modelo.getCriadorModelo());
+        //Informações essenciais
+        nomeModelo.setText(pm.modelo.getNomeModelo()); // ------ Nome
+        criadorModelo.setText(pm.modelo.getCriadorModelo()); //  Criador
+        versao1Modelo.setText(pm.modelo.getVersaoModelo()[0]); //Versão grande
+        versao2Modelo.setText(pm.modelo.getVersaoModelo()[1]); //Versão media
+        versao3Modelo.setText(pm.modelo.getVersaoModelo()[2]); //Versão pequena
+        idModelo.setText(pm.modelo.getIdModelo()); // ---------- ID
 
-        versao1Modelo.setText(pm.modelo.getVersaoModelo()[0]);
-        versao2Modelo.setText(pm.modelo.getVersaoModelo()[1]);
-        versao3Modelo.setText(pm.modelo.getVersaoModelo()[2]);
+        String[] nomeImg = pm.modelo.getImagemModelo().getUrl().split("/"); //Icon modelo
+        imagemModelo.setText(nomeImg[nomeImg.length-1]); // ---- Icon modelo
 
-        idModelo.setText(pm.modelo.getIdModelo());
+        //Outras informações
+        numPags = pm.modelo.getNumPaginas();
+        switch(numPags) { // Números de páginas
+            case 1: rb1.getToggleGroup().getSelectedToggle().setSelected(true); break;
+            case 2: rb2.getToggleGroup().getSelectedToggle().setSelected(true); break;
+            case 3: rb3.getToggleGroup().getSelectedToggle().setSelected(true); break;
+        }
 
-        String[] nomeImg = pm.modelo.getImagemModelo().getUrl().split("/");
-        imagemModelo.setText(nomeImg[nomeImg.length-1]);
+        imagesBG = pm.modelo.getImagesBG();
+        String[] nomeBG = String.valueOf(imagesBG[numPags]).split("/");
+        if(nomeBG[0].equals("null")) {
+            bImageBG.setText("Sem imagem");
+        } else {
+            bImageBG.setText(nomeBG[nomeBG.length-1]);
+        }
+
+        pags = pm.modelo.getPaginas();
+
+        folha.getChildren().addAll(pags[atualPag-1].getChildren());
+        attHierarquia();
+        System.out.println("Carregando projeto...");
     }
 
-    private void salvandoProjeto() {
+    private void attFolha(byte proxPag) {
+        //Guardando e carregando novo BG
+        imagesBG[atualPag-1] = imageBG.getImage();
+
+        //Guardando e carregando nova folha
+        pags[atualPag-1].getChildren().clear();
+        pags[atualPag-1].getChildren().addAll(folha.getChildren());
+        folha.getChildren().add(pags[atualPag-1].getChildren().getFirst());
+
+        atualPag = proxPag;
+        System.out.println("Indo para folha " + atualPag);
+
+        //Adicionando novo BG
+        imageBG.setImage(imagesBG[atualPag-1]);
+
+        //Adicionando nodes da nova folha
+        folha.getChildren().addAll(pags[atualPag-1].getChildren());
+
+        attHierarquia();
+        selectControl = null;
+        listHierarquia.getSelectionModel().select(null); //Desmarcando item da hierarquia
+        listNodes.getSelectionModel().select(null); //Desmarcando item da lista de nodes
+    }
+
+    private void salvandoProjeto(boolean fechar) {
 
         String[] versao = {versao1Modelo.getText(), versao2Modelo.getText(), versao3Modelo.getText()};
 
@@ -93,11 +229,286 @@ public class ControlEditorProjeto implements Initializable {
         projetoModelo.modelo.setVersaoModelo(versao);
         //projetoModelo.modelo.setImagemModelo();
 
-        //projetoModelo.modelo.setNumPaginas();
-        //projetoModelo.modelo.setPaginas();
+        projetoModelo.modelo.setNumPaginas(numPags);
+
+        pags[atualPag-1].getChildren().addAll(folha.getChildren());
+        folha.getChildren().add(pags[atualPag-1].getChildren().getFirst());
+
+        projetoModelo.modelo.setPaginas(pags); //Salvando folhas
 
         Save.listaProjetos.replace(idProjeto, projetoModelo);
+
+        if(!fechar) {
+            folha.getChildren().addAll(pags[atualPag-1].getChildren());
+        }
+        System.out.println("Salvando projeto...");
     }
 
+    //Aba informações da ficha -------------------------------------------
+    private void attNumPaginas(ActionEvent event) {
+        ToggleGroup group = rb1.getToggleGroup();
+        byte num = Byte.parseByte(group.getSelectedToggle().toString().split("'")[1]);
+
+        switch(num) {
+            case 1:
+
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+
+        atualPag = 1;
+
+    }
+
+    //Aba Hierarquia -----------------------------------------------------
+    private void selecionandoItemHierarquia(MouseEvent event) {
+        if(event.isPrimaryButtonDown()) {
+            if(listHierarquia.getSelectionModel().getSelectedItem() != null ) {
+                TreeItem item = listHierarquia.getSelectionModel().getSelectedItem();
+                Template template = (Template) folha.getChildren().get(listHierarquia.getRow(item)+1);
+                selecionadoTemplate(template);
+            }
+        } else if(event.isSecondaryButtonDown()) {
+            listHierarquia.getSelectionModel().select(null);
+        }
+    }
+
+    private void attHierarquia() {
+        TreeItem<String> root = new TreeItem<>();
+        byte[] numItens = new byte[itens.length];
+
+        for(byte i = 1; i < folha.getChildren().size(); i++) {
+            Template t = (Template) folha.getChildren().get(i);
+            numItens[t.tipoNode]++;
+
+            String txt = String.format("%s %s", t, numItens[t.tipoNode]);
+            root.getChildren().add(new TreeItem<>(txt));
+        }
+        listHierarquia.setRoot(root);
+    }
+
+    //Aba Nodes ----------------------------------------------------------
+    private void createListNodes() {
+        TreeItem<String> root = new TreeItem<>();
+        for(String n : itens) {
+            root.getChildren().add(new TreeItem<>(n));
+        }
+        listNodes.setRoot(root);
+    }
+
+    private void selecionandoItemNode(MouseEvent event) {
+        if(event.isPrimaryButtonDown()) {
+            createTemplate(listNodes.getSelectionModel().getSelectedIndices().getFirst());
+        } else if(event.isSecondaryButtonDown()) {
+            listNodes.getSelectionModel().select(null); //Desmarcando item da lista de nodes
+        }
+    }
+
+    private void createTemplate(int tipoNode) {
+        Template c = new Template(tipoNode);
+        double tamSize = 18;
+        double tamW = 250; //Tam padrão
+        double tamH = 40;  //Tam padrão
+        switch(c.nomeNode) {
+            case "Número Inteiro":
+                c.setText("Inteiro");
+                tamW = 100;
+                break;
+            case "Número Racional":
+                c.setText("Racional");
+                tamW = 100;
+        }
+
+        double posX = folha.getPrefWidth()/2 - tamW/2;
+        double posY = folha.getPrefHeight()/2 - tamH/2;
+
+        c.setFont(new Font("Arial Black", tamSize));
+        c.setPadding(new Insets(0, 0, 0, 5));
+        c.setPrefWidth(tamW);
+        c.setPrefHeight(tamH);
+        c.setLayoutX(posX);
+        c.setLayoutY(posY);
+
+        c.initInfos(tamSize, tamW, tamH, posX, posY);
+        clicandoNodes(c);
+        selecionadoTemplate(c);
+        folha.getChildren().add(c);
+        attHierarquia();
+
+    }
+
+    //Aba Propriedades ---------------------------------------------------
+    private void attMenuPropriedades() {
+        String txt = "Propriedades: ";
+        if(selectControl == null) {
+            txt += "Vazio";
+            vbPros.setDisable(true);
+
+            tfText.setText(null);
+            tfTextPrompt.setText(null);
+
+            tfTamFont.setText(null);
+            tfComprimento.setText(null);
+            tfAltura.setText(null);
+            tfPosX.setText(null);
+            tfPosY.setText(null);
+
+        } else {
+            txt += selectControl.getText();
+            vbPros.setDisable(false);
+
+            switch(selectControl.tipoNode) {
+                case 1:
+                    tfText.setDisable(false);
+
+                    tfTextPrompt.setText(null);
+                    tfText.setText(selectControl.text);
+
+                    attPropriedade(tfText);
+
+                    tfTextPrompt.setDisable(true);
+                    break;
+
+                case 2, 3, 4:
+                    tfTextPrompt.setDisable(false);
+
+                    tfText.setText(null);
+                    tfTextPrompt.setText(selectControl.textPrompt);
+
+                    attPropriedade(tfTextPrompt);
+
+                    tfText.setDisable(true);
+                    break;
+            }
+
+            tfTamFont.setText(String.valueOf((selectControl.tamFont)));
+            tfComprimento.setText(String.valueOf((selectControl.tamWid)));
+            tfAltura.setText(String.valueOf((selectControl.tamHei)));
+            tfPosX.setText(String.valueOf((selectControl.posX)));
+            tfPosY.setText(String.valueOf((selectControl.posY)));
+
+            attPropriedade(tfTamFont);
+            attPropriedade(tfComprimento);
+            attPropriedade(tfAltura);
+            attPropriedade(tfPosX);
+            attPropriedade(tfPosY);
+        }
+        labelPropriedade.setText(txt);
+    }
+
+    private void attPropriedade(TextField tf) {
+
+        tf.setOnAction(event -> {
+            switch(tf.getId()) {
+                case "tfText":
+                    selectControl.text = tf.getText();
+                    selectControl.setText(tf.getText());
+                    break;
+
+                case "tfTextPrompt":
+                    selectControl.textPrompt = tf.getText();
+                    break;
+
+                case "tfTamFont":
+                    double tamFont = Math.clamp(Double.parseDouble(tf.getText()), 12, 48);
+                    selectControl.tamFont = tamFont;
+                    selectControl.setFont( new Font("Arial Black", tamFont));
+                    tfTamFont.setText(String.valueOf(tamFont));
+                    break;
+
+                case "tfComprimento":
+                    double w = Math.clamp(Double.parseDouble(tf.getText()), 30, tamW);
+                    selectControl.tamWid = w;
+                    selectControl.setPrefWidth(w);
+                    tfComprimento.setText(String.valueOf(w));
+
+                    //Reposicionando node
+                    selectControl.setLayoutX(Math.clamp(selectControl.getLayoutX(), 0, tamW-selectControl.getPrefWidth()));
+                    break;
+
+                case "tfAltura":
+                    double h = Math.clamp(Double.parseDouble(tf.getText()), 30, 160);
+                    selectControl.tamHei = h;
+                    selectControl.setPrefHeight(h);
+                    tfAltura.setText(String.valueOf(h));
+
+                    //Reposicionando node
+                    selectControl.setLayoutY(Math.clamp(selectControl.getLayoutY(), 0, tamH-selectControl.getPrefHeight()));
+                    break;
+
+                case "tfPosX":
+                    double posX = Math.clamp(Double.parseDouble(tf.getText()), 0, tamW-selectControl.getPrefWidth());
+                    selectControl.posX = posX;
+                    selectControl.setLayoutX(posX);
+                    tfPosX.setText(String.valueOf(posX));
+                    break;
+
+                case "tfPosY":
+                    double posY = Math.clamp(Double.parseDouble(tf.getText()), 0, tamW-selectControl.getPrefWidth());
+                    selectControl.posY = posY;
+                    selectControl.setLayoutY(posY);
+                    tfPosY.setText(String.valueOf(posY));
+                    break;
+            }
+        });
+    }
+
+    //Geral --------------------------------------------------------------
+    private void clicandoNodes(Template node) {
+
+        node.setOnMousePressed(event -> {
+            selecionadoTemplate(node);
+            //Posição do clique
+            mouseAnchorX = event.getX();
+            mouseAnchorY = event.getY();
+        });
+        //Arrastando o node na folha
+        node.setOnMouseDragged(event -> {
+            if(event.isPrimaryButtonDown()) {
+                double pivoX = event.getSceneX() - node.getParent().getLayoutX();
+                double pivoY = event.getSceneY() - (node.getParent().getLayoutY()*2) + (274* nivelScroll.getVvalue());
+
+                double posX = Math.clamp(pivoX, 0, tamW) - mouseAnchorX;
+                double posY = Math.clamp(pivoY, 0, tamH) - mouseAnchorY;
+
+                node.setLayoutX(posX);
+                node.setLayoutY(posY);
+            }
+        });
+        //Reposicionando o node quando soltar
+        node.setOnMouseReleased(event -> {
+            if(selectControl != null) {
+                double pivoX = event.getSceneX() - node.getParent().getLayoutX();
+                double pivoY = event.getSceneY() - (node.getParent().getLayoutY()*2) + (274* nivelScroll.getVvalue());
+                double posX  = Math.clamp(pivoX - mouseAnchorX, 0, tamW - node.getPrefWidth());
+                double posY  = Math.clamp(pivoY - mouseAnchorY, 0, tamH - node.getPrefHeight());
+                node.setLayoutX(posX);
+                node.setLayoutY(posY);
+
+                selectControl.posX = posX;
+                selectControl.posY = posY;
+                tfPosX.setText(String.valueOf(posX));
+                tfPosY.setText(String.valueOf(posY));
+            }
+        });
+    }
+
+    private void removerNode(ActionEvent event) {
+        folha.getChildren().remove(selectControl);
+        selectControl = null;
+        attMenuPropriedades();
+        attHierarquia();
+    }
+
+    private void selecionadoTemplate(Template node) {
+        if(selectControl != null) {selectControl.setStyle("-fx-border-color: black");}
+        node.setStyle("-fx-border-color: red");
+
+        selectControl = node;
+        attMenuPropriedades();
+    }
 
 }

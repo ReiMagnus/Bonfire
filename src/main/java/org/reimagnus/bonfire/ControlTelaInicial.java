@@ -16,12 +16,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import org.reimagnus.bonfire.modelos.ModeloPronto;
-import org.reimagnus.bonfire.modelos.Personagem;
-import org.reimagnus.bonfire.modelos.ProjetoModelo;
+import org.reimagnus.bonfire.modelos.*;
 
 import java.net.URL;
 import java.util.*;
@@ -33,7 +30,7 @@ public class ControlTelaInicial implements Initializable {
     private Parent root;
 
     @FXML
-    private AnchorPane anchorPane;
+    private AnchorPane mainPane;
     @FXML
     private FlowPane icones;
     @FXML
@@ -132,13 +129,18 @@ public class ControlTelaInicial implements Initializable {
     private void mostrarPersonagens() {
         verPane = true;
         icones.getChildren().removeAll(icones.getChildren());
+
+        Personagem p = null;
         for(int i = 0; i < Save.listaPersonagens.size(); i++) {
-            String nome = "persona" + (i+1);
-            Image imagem = new Image("/gustavo.jpg");
+            p = Save.listaPersonagens.get(i);
+            String nome = p.getNomePersonagem();
+            Image imagem = p.getIconPersonagem();
 
             icones.getChildren().add(criarIcon(nome, imagem));
         }
-        //System.out.println("Monstrando os personagens");
+
+        bmVerPersonagem.setStyle("-fx-background-color: #5a6988");
+        bmVerModelo.setStyle("-fx-background-color: #262b44");
     }
 
     private void mostrarProjetos() {
@@ -151,31 +153,8 @@ public class ControlTelaInicial implements Initializable {
             icones.getChildren().add(criarIcon(nome, imagem));
         }
         //System.out.println("Monstrando os projetos de modelos");
-    }
-
-    private void mostrarJanelinha() {
-        if(janelinha == null) {
-            FlowPane hud = new FlowPane();
-            hud.setId("hud");
-            hud.setMaxSize(1280, 720);
-            hud.setPrefWidth(hud.getMaxWidth());
-            hud.setPrefHeight(hud.getMaxHeight());
-            hud.setAlignment(Pos.CENTER);
-
-            VBox j = criarJanelinha();
-
-            hud.getChildren().add(j);
-            anchorPane.getChildren().add(hud);
-
-            janelinha = hud;
-        }
-    }
-
-    private void fecharJanelinha(ActionEvent event) {
-        if(janelinha != null) {
-            anchorPane.getChildren().remove(janelinha);
-            janelinha = null;
-        }
+        bmVerModelo.setStyle("-fx-background-color: #5a6988");
+        bmVerPersonagem.setStyle("-fx-background-color: #262b44");
     }
 
     // Métodos de fundo --------------------------------------------------
@@ -197,7 +176,7 @@ public class ControlTelaInicial implements Initializable {
         try {
             FXMLLoader loader;
 
-            stage = (Stage) anchorPane.getScene().getWindow();
+            stage = (Stage) mainPane.getScene().getWindow();
 
             int idProjeto = Integer.parseInt(event.getSource().toString().split("&")[1]);
 
@@ -206,8 +185,10 @@ public class ControlTelaInicial implements Initializable {
                 loader = new FXMLLoader(getClass().getResource("Personagem.fxml"));
                 root = loader.load();
 
+                //stage.setTitle(String.format("Bonfire - %s", Save.listaPersonagens.get(idProjeto).modelo.getNomeModelo()));
                 stage.setTitle("Bonfire - Personagem");
                 stage.centerOnScreen();
+                stage.resizableProperty().set(true);
 
                 stage.setMinWidth(660+16);
                 stage.setMinHeight(720+39);
@@ -220,7 +201,7 @@ public class ControlTelaInicial implements Initializable {
                 cep = loader.getController();
                 cep.carregandoProjeto(Save.listaProjetos.get(idProjeto), idProjeto);
 
-                stage.setTitle("Bonfire - Editor de ficha");
+                stage.setTitle(String.format("Bonfire - %s", Save.listaProjetos.get(idProjeto).modelo.getNomeModelo()));
             }
 
             scene = new Scene(root);
@@ -231,17 +212,6 @@ public class ControlTelaInicial implements Initializable {
             System.out.println("Erro em carregar a proxima cena.\n---------------------------------------------");
             e.printStackTrace();
         }
-    }
-
-    private VBox criarJanelinha() {
-
-        VBox j = new VBox();
-        j.setAlignment(Pos.CENTER);
-        j.setStyle("-fx-background-radius: 25");
-        j.setPrefWidth(250);
-        j.setPrefHeight(300);
-
-        return j;
     }
 
     public void teste(ActionEvent event) {

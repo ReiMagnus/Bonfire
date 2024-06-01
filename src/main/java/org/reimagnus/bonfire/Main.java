@@ -20,12 +20,12 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("TelaInicial.fxml"));
         Parent root = loader.load();
 
-        Scene scene = new Scene(root, 1280, 720);
+        int width = 1280;
+        int height = 720;
 
-        stage.setMinWidth(1280+16);
-        stage.setMinHeight(720+39);
-        stage.centerOnScreen();
+        Scene scene = new Scene(root, width, height);
 
+        stage.resizableProperty().set(false);
         stage.setTitle("Bonfire");
         stage.getIcons().add(icon);
 

@@ -1,7 +1,5 @@
 package org.reimagnus.bonfire.modelos;
 
-import java.util.Arrays;
-
 public class ModeloPronto {
 
     public Modelo modelo;

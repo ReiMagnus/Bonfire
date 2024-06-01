@@ -5,9 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -28,30 +25,31 @@ public class ControlPersonagem implements Initializable {
     public Personagem personagem;
 
     @FXML
-    private VBox vBox;
+    private VBox mainPane;
     @FXML
     private Pane folha;
     @FXML
     private FlowPane tela;
 
-    int[] tamanhosFlowPane = {964, 0, 0};
+    int tamFlowPane = 964;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //draggableMaker.makeDraggable(tela);
     }
 
     public void scrollPane(ScrollEvent event) {
         if(event.isControlDown()) {
             double zoomFactor = 0.1;
             double deltaY = event.getDeltaY();
+            float min = 1;
+            float max = 1.3F;
 
             if(deltaY < 0) {zoomFactor *= -1;}
 
-            if(folha.getScaleX() >= 0.8 && folha.getScaleX() <= 1.2) {
-                folha.setScaleX(Math.clamp((folha.getScaleX() + zoomFactor), 0.8, 1.2 ));
-                folha.setScaleY(Math.clamp((folha.getScaleY() + zoomFactor), 0.8, 1.2 ));
-                tela.setPrefHeight( tamanhosFlowPane[0]*folha.getScaleX() );
+            if(folha.getScaleX() >= min && folha.getScaleX() <= max) {
+                folha.setScaleX(Math.clamp((folha.getScaleX() + zoomFactor), min, max));
+                folha.setScaleY(Math.clamp((folha.getScaleY() + zoomFactor), min, max));
+                tela.setPrefHeight( tamFlowPane*folha.getScaleX() );
             }
         }
     }
@@ -62,9 +60,10 @@ public class ControlPersonagem implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("TelaInicial.fxml"));
 
             root = loader.load();
-            stage = (Stage) vBox.getScene().getWindow();
+            stage = (Stage) mainPane.getScene().getWindow();
             scene = new Scene(root);
 
+            stage.resizableProperty().set(false);
             stage.setTitle("Bonfire");
             stage.setMaxWidth(Double.MAX_VALUE);
 
