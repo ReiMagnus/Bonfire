@@ -18,14 +18,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.reimagnus.bonfire.modelos.ModeloPronto;
 import org.reimagnus.bonfire.modelos.ProjetoModelo;
 import org.reimagnus.bonfire.nodes.Template;
 
 import java.net.URL;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 public class ControlEditorProjeto implements Initializable {
 
@@ -128,34 +126,50 @@ public class ControlEditorProjeto implements Initializable {
 
     //Botões da interface superior ---------------------------------------
     public void buttonTelaInicial() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("TelaInicial.fxml"));
-
-            root = loader.load();
-            stage = (Stage) mainPane.getScene().getWindow();
-            scene = new Scene(root);
-
-            stage.setTitle("Bonfire");
-
-            salvandoProjeto(true);
-
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            System.out.println("Erro em carregar a proxima cena.\n---------------------------------------------");
-            e.printStackTrace();
-        }
+        salvandoProjeto(true);
+        voltarTelaInicial();
     }
 
     public void buttonSalvar() {
         salvandoProjeto(false);
     }
 
+    public void buttonExportar() {
+        salvandoProjeto(true);
+
+        ModeloPronto modeloPronto = new ModeloPronto(projetoModelo);
+
+        int num = -1;
+        for(ModeloPronto mp : Save.listaModelos) {
+            if(num <= modeloPronto.compareTo(mp)) {
+                num = modeloPronto.compareTo(mp);
+            }
+        }
+
+        if(num == -1) {
+            Save.listaModelos.add(modeloPronto);
+        } else if(num == 0) {
+            Save.listaModelos.remove(modeloPronto); //Removendo quando o id igual
+            Save.listaModelos.add(modeloPronto); //Adicionando quando a versão mais nova
+        } else {
+            System.out.println("Já existe uma versão mais atualizada no sistema. ");
+        }
+
+        // Aumentando o número da versão
+        String[] novaVersao = projetoModelo.modelo.getVersaoModelo();
+        novaVersao[2] = String.valueOf(Integer.parseInt(novaVersao[2])+1);
+        projetoModelo.modelo.setVersaoModelo(novaVersao);
+
+        //Coloquando novo modelo
+        versao3Modelo.setText(projetoModelo.modelo.getVersaoModelo()[2]); //Versão pequena
+
+        folha.getChildren().addAll(pags[atualPag-1].getChildren());
+    }
+
     public void trocarPagina(ActionEvent event) {
         Button b = (Button) event.getTarget();
         attFolha(Byte.parseByte(b.getId().split("")[7]));
     }
-
 
     //Manipulação do projeto ---------------------------------------------
     public void carregandoProjeto(ProjetoModelo pm, int id) {
@@ -192,6 +206,13 @@ public class ControlEditorProjeto implements Initializable {
         pags = pm.modelo.getPaginas();
 
         folha.getChildren().addAll(pags[atualPag-1].getChildren());
+
+        for(int i = 1; i < folha.getChildren().size(); i++) {
+            clicandoNodes((Template) folha.getChildren().get(i));
+            selecionadoTemplate((Template) folha.getChildren().get(i));
+        }
+
+        System.out.println(Arrays.toString(projetoModelo.modelo.getVersaoModelo()));
         attHierarquia();
         System.out.println("Carregando projeto...");
     }
@@ -213,6 +234,11 @@ public class ControlEditorProjeto implements Initializable {
 
         //Adicionando nodes da nova folha
         folha.getChildren().addAll(pags[atualPag-1].getChildren());
+
+        for(int i = 1; i < folha.getChildren().size(); i++) {
+            clicandoNodes((Template) folha.getChildren().get(i));
+            selecionadoTemplate((Template) folha.getChildren().get(i));
+        }
 
         attHierarquia();
         selectControl = null;
@@ -242,6 +268,24 @@ public class ControlEditorProjeto implements Initializable {
             folha.getChildren().addAll(pags[atualPag-1].getChildren());
         }
         System.out.println("Salvando projeto...");
+    }
+
+    private void voltarTelaInicial() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("TelaInicial.fxml"));
+
+            root = loader.load();
+            stage = (Stage) mainPane.getScene().getWindow();
+            scene = new Scene(root);
+
+            stage.setTitle("Bonfire");
+
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("Erro em carregar a proxima cena.\n---------------------------------------------");
+            e.printStackTrace();
+        }
     }
 
     //Aba informações da ficha -------------------------------------------
@@ -301,7 +345,9 @@ public class ControlEditorProjeto implements Initializable {
 
     private void selecionandoItemNode(MouseEvent event) {
         if(event.isPrimaryButtonDown()) {
-            createTemplate(listNodes.getSelectionModel().getSelectedIndices().getFirst());
+            if(listNodes.getSelectionModel().getSelectedItem() != null) {
+                createTemplate(listNodes.getSelectionModel().getSelectedIndices().getFirst());
+            }
         } else if(event.isSecondaryButtonDown()) {
             listNodes.getSelectionModel().select(null); //Desmarcando item da lista de nodes
         }
@@ -361,7 +407,7 @@ public class ControlEditorProjeto implements Initializable {
             vbPros.setDisable(false);
 
             switch(selectControl.tipoNode) {
-                case 1:
+                case 0:
                     tfText.setDisable(false);
 
                     tfTextPrompt.setText(null);
@@ -372,7 +418,7 @@ public class ControlEditorProjeto implements Initializable {
                     tfTextPrompt.setDisable(true);
                     break;
 
-                case 2, 3, 4:
+                case 1, 2, 3:
                     tfTextPrompt.setDisable(false);
 
                     tfText.setText(null);
@@ -464,6 +510,7 @@ public class ControlEditorProjeto implements Initializable {
             //Posição do clique
             mouseAnchorX = event.getX();
             mouseAnchorY = event.getY();
+
         });
         //Arrastando o node na folha
         node.setOnMouseDragged(event -> {

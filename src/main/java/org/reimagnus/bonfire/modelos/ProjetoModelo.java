@@ -1,5 +1,6 @@
 package org.reimagnus.bonfire.modelos;
 
+import java.io.Serializable;
 import java.util.Random;
 
 public class ProjetoModelo {

@@ -117,7 +117,7 @@
                      </Label>
                      <HBox alignment="CENTER" prefHeight="30.0" prefWidth="150.0" spacing="7.0">
                         <children>
-                           <RadioButton fx:id="rb1" mnemonicParsing="false" selected="true" text="1">
+                           <RadioButton fx:id="rb1" focusTraversable="false" mnemonicParsing="false" selected="true" text="1">
                               <toggleGroup>
                                  <ToggleGroup fx:id="numPags" />
                               </toggleGroup>
@@ -125,12 +125,12 @@
                                  <Font size="14.0" />
                               </font>
                            </RadioButton>
-                           <RadioButton fx:id="rb2" mnemonicParsing="false" text="2" toggleGroup="$numPags">
+                           <RadioButton fx:id="rb2" focusTraversable="false" mnemonicParsing="false" text="2" toggleGroup="$numPags">
                               <font>
                                  <Font size="14.0" />
                               </font>
                            </RadioButton>
-                           <RadioButton fx:id="rb3" mnemonicParsing="false" text="3" toggleGroup="$numPags">
+                           <RadioButton fx:id="rb3" focusTraversable="false" mnemonicParsing="false" text="3" toggleGroup="$numPags">
                               <font>
                                  <Font size="14.0" />
                               </font>
@@ -169,7 +169,7 @@
    <VBox layoutX="250.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="780.0">
       <ToolBar maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0">
          <Button fx:id="bSalvar" mnemonicParsing="false" onAction="#buttonSalvar" text="Salvar" />
-         <Button fx:id="bExportar" mnemonicParsing="false" text="Exportar" />
+         <Button fx:id="bExportar" mnemonicParsing="false" onAction="#buttonExportar" text="Exportar" />
          <Line endY="10.0" scaleX="2.0" startY="-10.0" />
          <Button fx:id="bPagina1" mnemonicParsing="false" onAction="#trocarPagina" text="Página 1" />
          <Button fx:id="bPagina2" mnemonicParsing="false" onAction="#trocarPagina" text="Página 2" />
@@ -199,7 +199,7 @@
                <Font name="Arial Black" size="20.0" />
             </font>
          </Label>
-         <TreeView fx:id="listNodes" prefHeight="250.0" prefWidth="200.0">
+         <TreeView fx:id="listNodes" focusTraversable="false" prefHeight="250.0" prefWidth="200.0">
             <VBox.margin>
                <Insets />
             </VBox.margin>

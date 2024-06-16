@@ -4,7 +4,7 @@
 }
 
 #paneTitle {
-    -fx-background-color: #262b44;
+    -fx-background-color: #470905;
 }
 #labelBonfire {
     -fx-text-fill: WHITE;
@@ -19,12 +19,12 @@
 }
 
 VBox {
-    -fx-background-color: #3a4466;
+    -fx-background-color: #85221b;
     -fx-spacing: 10;
     -fx-padding: 10, 0, 0, 0;
 }
 VBox > Button {
-    -fx-background-color: #262b44;
+    -fx-background-color: #470905;
     -fx-background-radius: 25;
 
     -fx-max-width: 180;
@@ -38,18 +38,19 @@ VBox > Button {
 }
 
 VBox > Button:pressed {
-    -fx-background-color: #5a6988;
+    -fx-background-color: #6db5ad;
 }
 
 #icones {
-    -fx-background-color: #5a6988;
+    -fx-background-color: #6db5ad;
     -fx-padding: 20;
     -fx-hgap: 20;
-    -fx-vgap: 25;
+    -fx-vgap: 20;
 }
 
 #icones > Pane {
-    -fx-background-color: #262b44;
+    -fx-background-color: #85221b;
+    -fx-background-radius: 25;
 }
 #icones > Pane > ImageView {
 }

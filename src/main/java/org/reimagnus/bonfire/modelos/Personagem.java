@@ -7,11 +7,17 @@ public class Personagem {
     public Modelo modelo;
 
     private String nomePersonagem;
-    private Image iconPersonagem = new Image("IconBonfire.png");
+    private Image iconPersonagem;
 
-    public Personagem(/*ModeloPronto modeloPronto*/) {
-        //modelo = modeloPronto.modelo;
-        nomePersonagem = "Personagem";
+    public Personagem(ModeloPronto mp) {
+        modelo = new Modelo(mp.modelo);
+        nomePersonagem = "Personagem Novo";
+
+        if(modelo.getIdModelo().equals("/IconProjeto.png")) {
+            iconPersonagem = new Image("/IconPersonagem.png");
+        } else {
+            iconPersonagem =  modelo.getImagemModelo();
+        }
     }
 
     //Métodos tela inicial ----------------------

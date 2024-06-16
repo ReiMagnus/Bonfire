@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -29,16 +30,25 @@ public class ControlTelaInicial implements Initializable {
     private Scene scene;
     private Parent root;
 
+    //Geral -------
     @FXML
     private AnchorPane mainPane;
     @FXML
     private FlowPane icones;
     @FXML
-    private ListView<ModeloPronto> listFichas;
-    @FXML
     private Button bmCriarPersonagem, bmVerPersonagem, bmCriarModelo, bmVerModelo, bmGerenciarModelo;
 
-    private Node janelinha = null; //Indica se a janelinha está aparecendo
+    //Janelinha -----
+    @FXML
+    private FlowPane fpJanela;
+    @FXML
+    private Button fecharJanela, iptFicha, rmvFicha;
+    @FXML
+    private ToolBar optionsJanela;
+    @FXML
+    ListView<ModeloPronto> listFichas;
+
+    private byte janelinha = 0; //0 = Sem janela, 1 = Jan. Gereciar, 2 = Jan. Criar
     public boolean verPane = true; //True= ver personagens, False = ver projetos
 
     @Override
@@ -51,35 +61,33 @@ public class ControlTelaInicial implements Initializable {
 
     // Botões da Tela Inicial --------------------------------------------
     public void buttonCriarPersonagem(ActionEvent event) {
-        if(Save.listaPersonagens.size() < 15) {
-            criandoPersonagem();
+        if(janelinha == 0) {
+            if (Save.listaPersonagens.size() < 15) {attJanelinha((byte) 2);}
         }
     }
 
     public void buttonVerPersonagem(ActionEvent event) {
-        if(!verPane) {
-            mostrarPersonagens();
-        } else {
-            System.out.println("Você já está vendo os personagens");
+        if(janelinha == 0) {
+            if (!verPane) {mostrarPersonagens();}
         }
     }
 
     public void buttonCriarModelo(ActionEvent event) {
-        if(Save.listaProjetos.size() < 15) {
-            criandoProjeto();
+        if(janelinha == 0) {
+            if (Save.listaProjetos.size() < 15) {criandoProjeto();}
         }
     }
 
     public void buttonVerModelo(ActionEvent event) {
-        if(verPane) {
-            mostrarProjetos();
-        } else {
-            System.out.println("Você já está vendo os projetos");
+        if(janelinha == 0) {
+            if (verPane) {mostrarProjetos();}
         }
     }
 
     public void buttonGerenciarModelo(ActionEvent event) {
-        teste(event);
+        if(janelinha == 0) {
+            teste(event);
+        }
     }
 
     // Manipulando as listas ---------------------------------------------
@@ -117,7 +125,7 @@ public class ControlTelaInicial implements Initializable {
         label.setPrefHeight(32);
         label.setAlignment(Pos.CENTER);
         label.setTextAlignment(TextAlignment.CENTER);
-        label.setLayoutY(tamPane-4);
+        label.setLayoutY(tamPane-32);
 
         Pane pane = new Pane(imageView, button, label);
         pane.setPrefWidth(tamPane);
@@ -139,22 +147,27 @@ public class ControlTelaInicial implements Initializable {
             icones.getChildren().add(criarIcon(nome, imagem));
         }
 
-        bmVerPersonagem.setStyle("-fx-background-color: #5a6988");
-        bmVerModelo.setStyle("-fx-background-color: #262b44");
+        bmVerPersonagem.setStyle("-fx-background-color: #36847b");
+        bmVerModelo.setStyle("-fx-background-color: #470905");
     }
 
     private void mostrarProjetos() {
         verPane = false;
         icones.getChildren().removeAll(icones.getChildren());
         for(int i = 0; i < Save.listaProjetos.size(); i++) {
-            String nome = Save.listaProjetos.get(i).modelo.getNomeModelo();
-            Image imagem = new Image("/grafite.jpg");
+            String nome  = Save.listaProjetos.get(i).modelo.getNomeModelo();
+            Image imagem = Save.listaProjetos.get(i).modelo.getImagemModelo();
 
             icones.getChildren().add(criarIcon(nome, imagem));
         }
         //System.out.println("Monstrando os projetos de modelos");
-        bmVerModelo.setStyle("-fx-background-color: #5a6988");
-        bmVerPersonagem.setStyle("-fx-background-color: #262b44");
+        bmVerModelo.setStyle("-fx-background-color: #36847b");
+        bmVerPersonagem.setStyle("-fx-background-color: #470905");
+    }
+
+    private void attJanelinha(byte n) {
+        janelinha = n;
+
     }
 
     // Métodos de fundo --------------------------------------------------
@@ -165,11 +178,12 @@ public class ControlTelaInicial implements Initializable {
         mostrarProjetos();
     }
 
-    private void criandoPersonagem() {
-        Personagem p = new Personagem();
-
-        colocarListaPersonagens(p);
-        mostrarPersonagens();
+    private void criandoPersonagem(ModeloPronto mp) {
+        if(janelinha == 2) {
+            Personagem p = new Personagem(mp);
+            colocarListaPersonagens(p);
+            mostrarPersonagens();
+        }
     }
 
     private void mudarTela(ActionEvent event) {
