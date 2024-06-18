@@ -1,3 +1,6 @@
 Manifest-Version: 1.0
 Main-Class: org.reimagnus.bonfire.Main
+Class-Path: javafx-controls-21-win.jar javafx-fxml-21-win.jar javafx-fxm
+ l-21.jar javafx-base-21.jar javafx-controls-21.jar javafx-graphics-21.j
+ ar javafx-base-21-win.jar javafx-graphics-21-win.jar
 
