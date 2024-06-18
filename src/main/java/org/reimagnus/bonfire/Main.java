@@ -11,14 +11,13 @@ import javafx.stage.StageStyle;
 public class Main extends Application {
 
     private final Image icon = new Image("/IconBonfire.png");
+    public static final int width = 1280;
+    public static final int height = 720;
 
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("TelaInicial.fxml"));
         Parent root = loader.load();
-
-        int width = 1280;
-        int height = 720;
 
         Scene scene = new Scene(root, width, height);
 

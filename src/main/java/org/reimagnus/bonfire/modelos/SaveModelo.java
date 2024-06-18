@@ -1,13 +1,14 @@
 package org.reimagnus.bonfire.modelos;
 
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import org.reimagnus.bonfire.Save;
 import org.reimagnus.bonfire.nodes.SaveControl;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class SaveModelo implements Serializable {
 
@@ -55,9 +56,7 @@ public class SaveModelo implements Serializable {
         paginas = new ArrayList<>();
         for(Pane pane : panes) {
             Set<SaveControl> controls = new LinkedHashSet<>();
-            for(Node node : pane.getChildren()) {
-                controls.add(new SaveControl(node));
-            }
+            for(Node node : pane.getChildren()) { controls.add(new SaveControl(node)); }
             paginas.add(controls);
         }
     }

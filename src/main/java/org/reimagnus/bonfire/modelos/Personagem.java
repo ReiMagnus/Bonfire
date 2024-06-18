@@ -24,7 +24,8 @@ public class Personagem {
     public Personagem(SaveModelo sm) {
         modelo = new Modelo(sm);
 
-        nomePersonagem = "Personagem";
+        modelo.setNomeModelo(modelo.getNomeModelo());
+        nomePersonagem = modelo.getNomeModelo();
 
         String[] url = modelo.getImagemModelo().getUrl().split("/");
         if(("/" + url[url.length - 1]).equals("/IconProjeto.png")) {
@@ -36,8 +37,14 @@ public class Personagem {
     }
 
     //Métodos tela inicial ----------------------
-    public void setNomePersonagem(String nomePersonagem) {this.nomePersonagem = nomePersonagem;}
-    public void setIconPersonagem(Image iconPersonagem) {this.iconPersonagem = iconPersonagem;}
+    public void setNomePersonagem(String nomePersonagem) {
+        modelo.setNomeModelo(nomePersonagem);
+        this.nomePersonagem = nomePersonagem;
+    }
+    public void setIconPersonagem(Image iconPersonagem) {
+        modelo.setImagemModelo(iconPersonagem);
+        this.iconPersonagem = iconPersonagem;
+    }
 
     public String getNomePersonagem() {return nomePersonagem;}
     public Image getIconPersonagem() {return iconPersonagem;}

@@ -5,7 +5,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-import java.awt.*;
 import java.io.Serializable;
 
 public class SaveControl implements Serializable {

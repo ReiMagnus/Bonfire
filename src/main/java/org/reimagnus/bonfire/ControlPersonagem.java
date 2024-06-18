@@ -109,8 +109,6 @@ public class ControlPersonagem implements Initializable {
                 bPagina3.setDisable(true);
                 break;
         }
-        System.out.println(pags[0].getChildren());
-        System.out.println(folha.getChildren());
         System.out.println("Personagem carregado...");
     }
 

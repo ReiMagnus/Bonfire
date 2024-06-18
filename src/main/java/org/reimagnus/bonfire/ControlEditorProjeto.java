@@ -1,12 +1,9 @@
 package org.reimagnus.bonfire;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -23,7 +20,8 @@ import org.reimagnus.bonfire.modelos.ProjetoModelo;
 import org.reimagnus.bonfire.nodes.Template;
 
 import java.net.URL;
-import java.util.*;
+import java.util.NoSuchElementException;
+import java.util.ResourceBundle;
 
 public class ControlEditorProjeto implements Initializable {
 

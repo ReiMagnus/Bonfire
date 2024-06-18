@@ -5,24 +5,25 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
-import org.reimagnus.bonfire.modelos.*;
+import org.reimagnus.bonfire.modelos.ModeloPronto;
+import org.reimagnus.bonfire.modelos.Personagem;
+import org.reimagnus.bonfire.modelos.ProjetoModelo;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ResourceBundle;
 
 public class ControlTelaInicial implements Initializable {
 
@@ -50,6 +51,7 @@ public class ControlTelaInicial implements Initializable {
 
     private byte janelinha = 0; //0 = Sem janela, 1 = Jan. Gereciar, 2 = Jan. Criar
     public boolean verPane = true; //True= ver personagens, False = ver projetos
+    private boolean popupVisible = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -59,18 +61,24 @@ public class ControlTelaInicial implements Initializable {
         mostrarPersonagens();
 
         listFichas.setOnMousePressed(event -> {
-            if(event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-                criandoPersonagem(listFichas.getSelectionModel().getSelectedItem());
-                attJanelinha(0);
+            if(event.isPrimaryButtonDown()) {
+                if(event.getClickCount() == 2 && janelinha == 2) {
+                    criandoPersonagem(listFichas.getSelectionModel().getSelectedItem());
+                    attJanelinha(0);
+                }
             } else if(event.isSecondaryButtonDown()) {
                 listFichas.getSelectionModel().clearSelection();
+                bRemoverFicha.setDisable(true);
             }
-        });
 
+            if(listFichas.getSelectionModel().getSelectedItem() != null) {
+                bRemoverFicha.setDisable(false);
+            }
+
+        });
         bFecharJanela.setOnAction(this::buttonFecharjanela);
         bImportarFicha.setOnAction(this::buttonImportarFicha);
         bRemoverFicha.setOnAction(this::buttonRemoverFicha);
-
     }
 
     // Botões da Tela Inicial --------------------------------------------
@@ -109,11 +117,20 @@ public class ControlTelaInicial implements Initializable {
     private void buttonFecharjanela(ActionEvent event) {attJanelinha(0);}
 
     private void buttonImportarFicha(ActionEvent event) {
-        System.out.println("Importar Ficha");
+        Save.importarFicha((Stage) mainPane.getScene().getWindow());
+        listFichas.getItems().clear();
+        listFichas.getItems().addAll(Save.listaModelos);
+        Save.salvarArquivos();
     }
 
     private void buttonRemoverFicha(ActionEvent event) {
-        System.out.println("Remover Ficha");
+        ModeloPronto modeloPronto = listFichas.getSelectionModel().getSelectedItem();
+        Save.listaModelos.remove(modeloPronto);
+
+        listFichas.getSelectionModel().clearSelection();
+        listFichas.getItems().clear();
+        listFichas.getItems().addAll(Save.listaModelos);
+        Save.salvarArquivos();
     }
 
     // Manipulando as listas ---------------------------------------------
@@ -142,8 +159,8 @@ public class ControlTelaInicial implements Initializable {
         //Botão pra entrar do projeto/personagem
         button.setPrefWidth(tamPane);
         button.setPrefHeight(tamPane);
-        button.setOnAction(this::mudarTela);
         button.setId(String.format("&%d&", icones.getChildren().size()));
+        interagindoIcon(button);
 
         //Nome do modelo/personagem
         label.setText(nome);
@@ -197,6 +214,7 @@ public class ControlTelaInicial implements Initializable {
         switch(janelinha) {
             case 0:
                 fpJanela.setVisible(false);
+                listFichas.getSelectionModel().clearSelection();
                 break;
             case 1:
                 fpJanela.setVisible(true);
@@ -227,13 +245,83 @@ public class ControlTelaInicial implements Initializable {
         }
     }
 
-    private void mudarTela(ActionEvent event) {
+    private void interagindoIcon(Button button) {
+
+        int idProjeto = Integer.parseInt(button.toString().split("&")[1]);
+
+        button.setOnMousePressed(event -> {
+            if(event.isPrimaryButtonDown()) {
+                mudarTela(idProjeto);
+            } else {
+                contextMenuIcon(button, idProjeto);
+            }
+        });
+
+    }
+
+    private void contextMenuIcon(Button button, int idProjeto) {
+
+        Popup popup = new Popup();
+        popup.setOnHidden(event -> popupVisible = false);
+
+        ContextMenu cm = new ContextMenu();
+
+        // Só em personagem ----------
+        if(verPane) {
+            MenuItem renomear = new MenuItem("Renomear");
+            renomear.setOnAction(event -> {
+                if(popupVisible) {return;}
+
+                TextField tf = new TextField();
+                tf.setId("tfRenomear");
+                tf.setPrefWidth(250);
+                tf.setPrefHeight(40);
+//                tf.setStyle("-fx-background-color: silver");
+                tf.setFont(Font.font(22));
+                tf.setPromptText("Nome do personagem");
+                tf.setOnAction(event1 -> {
+                    Save.listaPersonagens.get(idProjeto).setNomePersonagem(tf.getText());
+                    Save.salvarArquivos();
+                    mostrarPersonagens();
+                    popup.hide();
+                    popupVisible = false;
+                });
+                popup.getContent().add(tf);
+
+                stage = (Stage) mainPane.getScene().getWindow();
+
+                popup.setX(stage.getX() + ((double) Main.width /2) - tf.getPrefWidth()/2);
+                popup.setY(stage.getY() + ((double) Main.height /2) - tf.getPrefHeight()/2);
+
+                popup.show(stage);
+
+                popupVisible = true;
+            });
+            cm.getItems().add(renomear);
+        }
+
+        // Em personagem e projetos ------
+        MenuItem remover = new CheckMenuItem("Remover");
+        remover.setOnAction(event -> {
+            if(!verPane) { // projetos
+                Save.listaProjetos.remove(idProjeto);
+                mostrarProjetos();
+            } else { // Personagem
+                Save.listaPersonagens.remove(idProjeto);
+                mostrarPersonagens();
+            }
+            Save.salvarArquivos();
+        });
+        cm.getItems().add(remover);
+
+        button.setContextMenu(cm);
+    }
+
+    private void mudarTela(int idProjeto) {
         try {
             FXMLLoader loader;
 
             stage = (Stage) mainPane.getScene().getWindow();
-
-            int idProjeto = Integer.parseInt(event.getSource().toString().split("&")[1]);
 
             if(verPane) { //Ir pra a tela de personagens
                 ControlPersonagem cp;
@@ -265,14 +353,10 @@ public class ControlTelaInicial implements Initializable {
             stage.setScene(scene);
             stage.show();
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Erro em carregar a proxima cena.\n---------------------------------------------");
             e.printStackTrace();
         }
-    }
-
-    public void teste(ActionEvent event) {
-        System.out.println(event.getSource());
     }
 
 }

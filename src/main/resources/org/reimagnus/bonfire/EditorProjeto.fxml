@@ -100,7 +100,7 @@
                                  <Insets left="5.0" />
                               </padding>
                            </Label>
-                           <Button fx:id="imagemModelo" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" prefHeight="30.0" text="Imagem" />
+                           <Button fx:id="imagemModelo" disable="true" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" prefHeight="30.0" text="Imagem" />
                         </children>
                      </VBox>
                   </children>
@@ -146,7 +146,7 @@
                            <Font size="16.0" />
                         </font>
                      </Label>
-                     <Button fx:id="bImageBG" focusTraversable="false" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="imagem" />
+                     <Button fx:id="bImageBG" disable="true" focusTraversable="false" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="imagem" />
                   </children>
                </HBox>
             </children>
