@@ -159,7 +159,7 @@
                <Font name="Arial Black" size="20.0" />
             </font>
          </Label>
-         <TreeView fx:id="listHierarquia" prefHeight="399.0" style="-fx-background-color: white;">
+         <TreeView fx:id="listHierarquia" focusTraversable="false" prefHeight="399.0" style="-fx-background-color: white;">
             <VBox.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </VBox.margin>

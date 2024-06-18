@@ -42,7 +42,7 @@ public class ControlTelaInicial implements Initializable {
     @FXML
     private FlowPane fpJanela;
     @FXML
-    private Button fecharJanela, iptFicha, rmvFicha;
+    private Button bFecharJanela, bImportarFicha, bRemoverFicha;
     @FXML
     private ToolBar optionsJanela;
     @FXML
@@ -57,12 +57,26 @@ public class ControlTelaInicial implements Initializable {
         //Métodos para carregar projetos, modelos e personagens salvos
         listFichas.getItems().addAll(Save.listaModelos);
         mostrarPersonagens();
+
+        listFichas.setOnMousePressed(event -> {
+            if(event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+                criandoPersonagem(listFichas.getSelectionModel().getSelectedItem());
+                attJanelinha(0);
+            } else if(event.isSecondaryButtonDown()) {
+                listFichas.getSelectionModel().clearSelection();
+            }
+        });
+
+        bFecharJanela.setOnAction(this::buttonFecharjanela);
+        bImportarFicha.setOnAction(this::buttonImportarFicha);
+        bRemoverFicha.setOnAction(this::buttonRemoverFicha);
+
     }
 
     // Botões da Tela Inicial --------------------------------------------
     public void buttonCriarPersonagem(ActionEvent event) {
         if(janelinha == 0) {
-            if (Save.listaPersonagens.size() < 15) {attJanelinha((byte) 2);}
+            if (Save.listaPersonagens.size() < 15) {attJanelinha( 2);}
         }
     }
 
@@ -86,8 +100,20 @@ public class ControlTelaInicial implements Initializable {
 
     public void buttonGerenciarModelo(ActionEvent event) {
         if(janelinha == 0) {
-            teste(event);
+            Save.salvarArquivos();
+            attJanelinha(1);
         }
+    }
+
+    // Botões da janelinha -----------------------------------------------
+    private void buttonFecharjanela(ActionEvent event) {attJanelinha(0);}
+
+    private void buttonImportarFicha(ActionEvent event) {
+        System.out.println("Importar Ficha");
+    }
+
+    private void buttonRemoverFicha(ActionEvent event) {
+        System.out.println("Remover Ficha");
     }
 
     // Manipulando as listas ---------------------------------------------
@@ -155,19 +181,34 @@ public class ControlTelaInicial implements Initializable {
         verPane = false;
         icones.getChildren().removeAll(icones.getChildren());
         for(int i = 0; i < Save.listaProjetos.size(); i++) {
+
             String nome  = Save.listaProjetos.get(i).modelo.getNomeModelo();
             Image imagem = Save.listaProjetos.get(i).modelo.getImagemModelo();
 
             icones.getChildren().add(criarIcon(nome, imagem));
         }
-        //System.out.println("Monstrando os projetos de modelos");
         bmVerModelo.setStyle("-fx-background-color: #36847b");
         bmVerPersonagem.setStyle("-fx-background-color: #470905");
     }
 
-    private void attJanelinha(byte n) {
-        janelinha = n;
+    private void attJanelinha(int n) {
+        janelinha = (byte) n;
 
+        switch(janelinha) {
+            case 0:
+                fpJanela.setVisible(false);
+                break;
+            case 1:
+                fpJanela.setVisible(true);
+                optionsJanela.setVisible(true);
+                bRemoverFicha.setDisable(true);
+                break;
+            case 2:
+                fpJanela.setVisible(true);
+                optionsJanela.setVisible(false);
+                break;
+
+        }
     }
 
     // Métodos de fundo --------------------------------------------------
@@ -198,15 +239,17 @@ public class ControlTelaInicial implements Initializable {
                 ControlPersonagem cp;
                 loader = new FXMLLoader(getClass().getResource("Personagem.fxml"));
                 root = loader.load();
+                cp = loader.getController();
+                cp.carregandoPersonagem(Save.listaPersonagens.get(idProjeto), idProjeto);
 
-                //stage.setTitle(String.format("Bonfire - %s", Save.listaPersonagens.get(idProjeto).modelo.getNomeModelo()));
-                stage.setTitle("Bonfire - Personagem");
+                stage.setTitle(String.format("Bonfire - %s", Save.listaPersonagens.get(idProjeto).getNomePersonagem()));
                 stage.centerOnScreen();
                 stage.resizableProperty().set(true);
 
-                stage.setMinWidth(660+16);
-                stage.setMinHeight(720+39);
                 stage.setMaxWidth(1280+16);
+                stage.setMinWidth(660+16);
+
+                stage.setMinHeight(720+39);
 
             } else { // Ir pra o editor de fichas
                 ControlEditorProjeto cep;

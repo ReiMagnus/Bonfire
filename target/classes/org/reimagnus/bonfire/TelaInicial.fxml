@@ -40,14 +40,14 @@
          <children>
             <ToolBar fx:id="optionsJanela" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="210.0" style="-fx-background-color: white; -fx-background-radius: 5;">
                <items>
-                  <Button fx:id="iptFicha" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" text="Importar" />
-                  <Button fx:id="rmvFicha" focusTraversable="false" mnemonicParsing="false" prefWidth="100.0" text="Remover" />
+                  <Button fx:id="bImportarFicha" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" text="Importar" />
+                  <Button fx:id="bRemoverFicha" focusTraversable="false" mnemonicParsing="false" prefWidth="100.0" text="Remover" />
                </items>
                <padding>
                   <Insets left="3.0" right="3.0" />
                </padding>
             </ToolBar>
-            <Button fx:id="fecharJanela" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: red; -fx-background-radius: 10;" text="X" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="bFecharJanela" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: red; -fx-background-radius: 10;" text="X" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Arial Black" size="14.0" />
                </font>

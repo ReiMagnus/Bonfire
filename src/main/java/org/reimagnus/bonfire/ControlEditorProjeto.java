@@ -106,10 +106,10 @@ public class ControlEditorProjeto implements Initializable {
         listNodes.setOnMousePressed(this::selecionandoItemNode);
         listNodes.setShowRoot(false);
 
-        Image bg = null;
-        //bg = new Image("FichaT20.png", tamW, tamH, true, true);
-        imageBG.setImage(bg);
-        //ImageView imageView = new ImageView(imageFolha);
+//        Image bg = null;
+//        bg = new Image("FichaT20.png", tamW, tamH, true, true);
+//        imageBG.setImage(bg);
+//        ImageView imageView = new ImageView(imageFolha);
 
         folha.setOnMousePressed(event -> {
             if(event.isSecondaryButtonDown()) {
@@ -127,6 +127,7 @@ public class ControlEditorProjeto implements Initializable {
     //Botões da interface superior ---------------------------------------
     public void buttonTelaInicial() {
         salvandoProjeto(true);
+        Save.salvarArquivos();
         voltarTelaInicial();
     }
 
@@ -135,40 +136,49 @@ public class ControlEditorProjeto implements Initializable {
     }
 
     public void buttonExportar() {
-        salvandoProjeto(true);
+        try {
+            salvandoProjeto(true);
+            ModeloPronto modeloPronto = new ModeloPronto(projetoModelo);
 
-        ModeloPronto modeloPronto = new ModeloPronto(projetoModelo);
-
-        int num = -1;
-        for(ModeloPronto mp : Save.listaModelos) {
-            if(num <= modeloPronto.compareTo(mp)) {
-                num = modeloPronto.compareTo(mp);
+            int num = -1;
+            for(ModeloPronto mp : Save.listaModelos) {
+                if(num <= modeloPronto.compareTo(mp)) {
+                    num = modeloPronto.compareTo(mp);
+                }
             }
+
+            if(num == -1) {
+                Save.listaModelos.add(modeloPronto);
+                Save.exportarFicha(modeloPronto);
+            } else if(num == 0) {
+                Save.listaModelos.remove(modeloPronto); //Removendo quando o id igual
+                Save.listaModelos.add(modeloPronto); //Adicionando quando a versão mais nova
+                Save.exportarFicha(modeloPronto);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Já existe uma versão mais atualizada no sistema.");
+                alert.show();
+            }
+
+            // Aumentando o número da versão
+            String[] novaVersao = projetoModelo.modelo.getVersaoModelo();
+            novaVersao[2] = String.valueOf(Integer.parseInt(novaVersao[2])+1);
+            projetoModelo.modelo.setVersaoModelo(novaVersao);
+
+            //Coloquando novo modelo
+            versao3Modelo.setText(projetoModelo.modelo.getVersaoModelo()[2]); //Versão pequena
+            folha.getChildren().addAll(pags[atualPag-1].getChildren());
+        } catch (NoSuchElementException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro ao exportar o projeto.");
+            alert.show();
         }
-
-        if(num == -1) {
-            Save.listaModelos.add(modeloPronto);
-        } else if(num == 0) {
-            Save.listaModelos.remove(modeloPronto); //Removendo quando o id igual
-            Save.listaModelos.add(modeloPronto); //Adicionando quando a versão mais nova
-        } else {
-            System.out.println("Já existe uma versão mais atualizada no sistema. ");
-        }
-
-        // Aumentando o número da versão
-        String[] novaVersao = projetoModelo.modelo.getVersaoModelo();
-        novaVersao[2] = String.valueOf(Integer.parseInt(novaVersao[2])+1);
-        projetoModelo.modelo.setVersaoModelo(novaVersao);
-
-        //Coloquando novo modelo
-        versao3Modelo.setText(projetoModelo.modelo.getVersaoModelo()[2]); //Versão pequena
-
-        folha.getChildren().addAll(pags[atualPag-1].getChildren());
     }
 
     public void trocarPagina(ActionEvent event) {
         Button b = (Button) event.getTarget();
         attFolha(Byte.parseByte(b.getId().split("")[7]));
+        System.out.println(folha.getChildren());
     }
 
     //Manipulação do projeto ---------------------------------------------
@@ -190,13 +200,22 @@ public class ControlEditorProjeto implements Initializable {
         //Outras informações
         numPags = pm.modelo.getNumPaginas();
         switch(numPags) { // Números de páginas
-            case 1: rb1.getToggleGroup().getSelectedToggle().setSelected(true); break;
-            case 2: rb2.getToggleGroup().getSelectedToggle().setSelected(true); break;
-            case 3: rb3.getToggleGroup().getSelectedToggle().setSelected(true); break;
+            case 1:
+                rb1.setSelected(true);
+                bPagina2.setDisable(true);
+                bPagina3.setDisable(true);
+                break;
+            case 2:
+                rb2.setSelected(true);
+                bPagina3.setDisable(true);
+                break;
+            case 3:
+                rb3.setSelected(true);
+                break;
         }
 
         imagesBG = pm.modelo.getImagesBG();
-        String[] nomeBG = String.valueOf(imagesBG[numPags]).split("/");
+        String[] nomeBG = String.valueOf(imagesBG[numPags-1]).split("/");
         if(nomeBG[0].equals("null")) {
             bImageBG.setText("Sem imagem");
         } else {
@@ -212,38 +231,8 @@ public class ControlEditorProjeto implements Initializable {
             selecionadoTemplate((Template) folha.getChildren().get(i));
         }
 
-        System.out.println(Arrays.toString(projetoModelo.modelo.getVersaoModelo()));
         attHierarquia();
         System.out.println("Carregando projeto...");
-    }
-
-    private void attFolha(byte proxPag) {
-        //Guardando e carregando novo BG
-        imagesBG[atualPag-1] = imageBG.getImage();
-
-        //Guardando e carregando nova folha
-        pags[atualPag-1].getChildren().clear();
-        pags[atualPag-1].getChildren().addAll(folha.getChildren());
-        folha.getChildren().add(pags[atualPag-1].getChildren().getFirst());
-
-        atualPag = proxPag;
-        System.out.println("Indo para folha " + atualPag);
-
-        //Adicionando novo BG
-        imageBG.setImage(imagesBG[atualPag-1]);
-
-        //Adicionando nodes da nova folha
-        folha.getChildren().addAll(pags[atualPag-1].getChildren());
-
-        for(int i = 1; i < folha.getChildren().size(); i++) {
-            clicandoNodes((Template) folha.getChildren().get(i));
-            selecionadoTemplate((Template) folha.getChildren().get(i));
-        }
-
-        attHierarquia();
-        selectControl = null;
-        listHierarquia.getSelectionModel().select(null); //Desmarcando item da hierarquia
-        listNodes.getSelectionModel().select(null); //Desmarcando item da lista de nodes
     }
 
     private void salvandoProjeto(boolean fechar) {
@@ -258,16 +247,16 @@ public class ControlEditorProjeto implements Initializable {
         projetoModelo.modelo.setNumPaginas(numPags);
 
         pags[atualPag-1].getChildren().addAll(folha.getChildren());
-        folha.getChildren().add(pags[atualPag-1].getChildren().getFirst());
+        folha.getChildren().add(pags[atualPag-1].getChildren().getFirst()); //recolocando o ImageView
 
-        projetoModelo.modelo.setPaginas(pags); //Salvando folhas
-
+        //Salvando folhas
+        projetoModelo.modelo.setPaginas(pags);
         Save.listaProjetos.replace(idProjeto, projetoModelo);
+        System.out.println("Salvando projeto...");
 
         if(!fechar) {
             folha.getChildren().addAll(pags[atualPag-1].getChildren());
         }
-        System.out.println("Salvando projeto...");
     }
 
     private void voltarTelaInicial() {
@@ -295,16 +284,21 @@ public class ControlEditorProjeto implements Initializable {
 
         switch(num) {
             case 1:
-
+                bPagina2.setDisable(true);
+                bPagina3.setDisable(true);
                 break;
             case 2:
+                bPagina2.setDisable(false);
+                bPagina3.setDisable(true);
                 break;
             case 3:
+                bPagina2.setDisable(false);
+                bPagina3.setDisable(false);
                 break;
         }
 
+        numPags = num;
         atualPag = 1;
-
     }
 
     //Aba Hierarquia -----------------------------------------------------
@@ -360,19 +354,17 @@ public class ControlEditorProjeto implements Initializable {
         double tamH = 40;  //Tam padrão
         switch(c.nomeNode) {
             case "Número Inteiro":
-                c.setText("Inteiro");
                 tamW = 100;
                 break;
             case "Número Racional":
-                c.setText("Racional");
                 tamW = 100;
+                break;
         }
 
         double posX = folha.getPrefWidth()/2 - tamW/2;
         double posY = folha.getPrefHeight()/2 - tamH/2;
 
         c.setFont(new Font("Arial Black", tamSize));
-        c.setPadding(new Insets(0, 0, 0, 5));
         c.setPrefWidth(tamW);
         c.setPrefHeight(tamH);
         c.setLayoutX(posX);
@@ -503,6 +495,35 @@ public class ControlEditorProjeto implements Initializable {
     }
 
     //Geral --------------------------------------------------------------
+    private void attFolha(byte proxPag) {
+        //Guardando e carregando novo BG
+//        imagesBG[atualPag-1] = imageBG.getImage();
+
+        //Guardando e carregando nova folha
+        pags[atualPag-1].getChildren().clear();
+        pags[atualPag-1].getChildren().addAll(folha.getChildren());
+        folha.getChildren().add(pags[atualPag-1].getChildren().getFirst());
+
+        atualPag = proxPag;
+        System.out.println("Indo para folha " + atualPag);
+
+        //Adicionando novo BG
+        imageBG.setImage(imagesBG[atualPag-1]);
+
+        //Adicionando nodes da nova folha
+        folha.getChildren().addAll(pags[atualPag-1].getChildren());
+
+        for(int i = 1; i < folha.getChildren().size(); i++) {
+            clicandoNodes((Template) folha.getChildren().get(i));
+            selecionadoTemplate((Template) folha.getChildren().get(i));
+        }
+
+        attHierarquia();
+        selectControl = null;
+        listHierarquia.getSelectionModel().select(null); //Desmarcando item da hierarquia
+        listNodes.getSelectionModel().select(null); //Desmarcando item da lista de nodes
+    }
+
     private void clicandoNodes(Template node) {
 
         node.setOnMousePressed(event -> {

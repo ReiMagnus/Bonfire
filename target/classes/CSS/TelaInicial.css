@@ -38,12 +38,12 @@ VBox > Button {
 }
 
 VBox > Button:pressed {
-    -fx-background-color: #6db5ad;
+    //-fx-background-color: #6db5ad;
 }
 
 #icones {
     -fx-background-color: #6db5ad;
-    -fx-padding: 20;
+    -fx-padding: 18;
     -fx-hgap: 20;
     -fx-vgap: 20;
 }

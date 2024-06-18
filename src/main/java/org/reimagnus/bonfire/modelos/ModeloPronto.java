@@ -10,6 +10,10 @@ public class ModeloPronto implements Comparable<ModeloPronto> {
         modelo = new Modelo(pm.modelo);
     }
 
+    public ModeloPronto(SaveModelo sm) {
+        modelo = new Modelo(sm);
+    }
+
     @Override
     public String toString() {
         return String.format("%s | %s | %s.%s.%s",

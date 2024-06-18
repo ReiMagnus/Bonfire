@@ -11,13 +11,28 @@ public class Personagem {
 
     public Personagem(ModeloPronto mp) {
         modelo = new Modelo(mp.modelo);
-        nomePersonagem = "Personagem Novo";
+        nomePersonagem = "Personagem";
 
-        if(modelo.getIdModelo().equals("/IconProjeto.png")) {
+        String[] url = modelo.getImagemModelo().getUrl().split("/");
+        if(("/" + url[url.length - 1]).equals("/IconProjeto.png")) {
             iconPersonagem = new Image("/IconPersonagem.png");
         } else {
             iconPersonagem =  modelo.getImagemModelo();
         }
+    }
+
+    public Personagem(SaveModelo sm) {
+        modelo = new Modelo(sm);
+
+        nomePersonagem = "Personagem";
+
+        String[] url = modelo.getImagemModelo().getUrl().split("/");
+        if(("/" + url[url.length - 1]).equals("/IconProjeto.png")) {
+            iconPersonagem = new Image("/IconPersonagem.png");
+        } else {
+            iconPersonagem =  modelo.getImagemModelo();
+        }
+
     }
 
     //Métodos tela inicial ----------------------
